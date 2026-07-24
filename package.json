@@ -7,14 +7,17 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
+    "lint:fsd": "node scripts/check-fsd-dependencies.mjs apps/client/src apps/admin/src && steiger apps/client/src --fail-on-warnings && steiger apps/admin/src --fail-on-warnings && steiger packages/core/src --fail-on-warnings",
     "lint:fix": "turbo run lint:fix",
     "check-types": "turbo run check-types",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "devDependencies": {
+    "@feature-sliced/steiger-plugin": "^0.7.0",
     "prettier": "^3.9.5",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "steiger": "^0.6.0",
     "turbo": "^2.5.0"
   }
 }
