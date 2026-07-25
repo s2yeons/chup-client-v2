@@ -20,7 +20,7 @@ const JobDetail = ({ job, onClose }: JobDetailProps) => {
   return (
     <div className="bg-foreground/20 fixed inset-0 z-50 flex justify-end" onMouseDown={onClose}>
       <div
-        className="bg-background h-full w-full max-w-xl overflow-y-auto p-6 shadow-2xl"
+        className="bg-sidebar h-full w-full max-w-xl overflow-y-auto p-6 shadow-2xl"
         onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="flex items-center justify-between">
