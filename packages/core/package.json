@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
+    "./entities": "./src/entities/index.ts",
     "./shared": "./src/shared/index.ts",
     "./shared/server": "./src/shared/index.server.ts"
   },
