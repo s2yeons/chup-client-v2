@@ -13,9 +13,9 @@ const ProfileView = () => {
   return (
     <div className="flex max-w-3xl flex-col gap-6">
       <div>
-        <p className="text-sm font-semibold text-primary">내 정보</p>
+        <p className="text-primary text-sm font-semibold">내 정보</p>
         <h1 className="mt-1 text-3xl font-bold">프로필과 이력서 관리</h1>
-        <p className="mt-2 text-muted-foreground">지원에 사용되는 기본 정보를 확인하세요.</p>
+        <p className="text-muted-foreground mt-2">지원에 사용되는 기본 정보를 확인하세요.</p>
       </div>
       <Card>
         <CardHeader>
@@ -30,7 +30,7 @@ const ProfileView = () => {
             ['전화번호', '010-2381-7721'],
           ].map(([label, value]) => (
             <div key={label}>
-              <p className="text-sm text-muted-foreground">{label}</p>
+              <p className="text-muted-foreground text-sm">{label}</p>
               <p className="mt-1 font-medium">{value}</p>
             </div>
           ))}
@@ -44,12 +44,12 @@ const ProfileView = () => {
         <CardContent>
           <div className="flex flex-col gap-4 rounded-2xl border border-dashed p-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-primary/10 p-3 text-primary">
+              <div className="bg-primary/10 text-primary rounded-xl p-3">
                 <FileText className="size-6" />
               </div>
               <div>
                 <p className="font-semibold">{fileName}</p>
-                <p className="text-sm text-muted-foreground">PDF · 1.2 MB · 2026.07.15 수정</p>
+                <p className="text-muted-foreground text-sm">PDF · 1.2 MB · 2026.07.15 수정</p>
               </div>
             </div>
             <ResumeReplaceInput onChange={setFileName} />

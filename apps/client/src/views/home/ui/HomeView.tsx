@@ -18,28 +18,42 @@ const HomeView = () => {
 
   return (
     <div className="flex flex-col gap-7">
-      <section className="relative overflow-hidden rounded-3xl bg-primary p-6 text-primary-foreground md:p-8">
+      <section className="bg-primary text-primary-foreground relative overflow-hidden rounded-3xl p-6 md:p-8">
         <div className="relative z-10 max-w-xl">
           <Badge className="bg-primary-foreground/15 text-primary-foreground hover:bg-primary-foreground/15">
             <Sparkles /> 이번 주 신규 공고 3개
           </Badge>
-          <h1 className="mt-5 text-balance text-3xl leading-tight font-bold md:text-4xl">
+          <h1 className="mt-5 text-3xl leading-tight font-bold text-balance md:text-4xl">
             꿈꾸는 커리어의 시작,
             <br />한 곳에서 빠르게.
           </h1>
-          <p className="mt-3 max-w-md text-sm leading-relaxed text-primary-foreground/80 md:text-base">
+          <p className="text-primary-foreground/80 mt-3 max-w-md text-sm leading-relaxed md:text-base">
             학교에 도착한 채용 소식을 확인하고, 등록한 이력서로 간편하게 지원하세요.
           </p>
-          <Button variant="secondary" className="mt-6" onClick={() => (window.location.href = '/jobs')}>
+          <Button
+            variant="secondary"
+            className="mt-6"
+            onClick={() => (window.location.href = '/jobs')}
+          >
             공고 둘러보기
             <ChevronRight data-icon="inline-end" />
           </Button>
         </div>
-        <BriefcaseBusiness className="absolute -right-8 -bottom-10 size-52 text-primary-foreground/10" />
+        <BriefcaseBusiness className="text-primary-foreground/10 absolute -right-8 -bottom-10 size-52" />
       </section>
       <section className="grid gap-4 sm:grid-cols-3">
-        <StatCard label="모집중 공고" value={`${activeJobs.length}개`} note="지금 지원할 수 있어요" icon={BriefcaseBusiness} />
-        <StatCard label="나의 지원" value={`${myApplications.length}건`} note="최근 지원 현황" icon={Send} />
+        <StatCard
+          label="모집중 공고"
+          value={`${activeJobs.length}개`}
+          note="지금 지원할 수 있어요"
+          icon={BriefcaseBusiness}
+        />
+        <StatCard
+          label="나의 지원"
+          value={`${myApplications.length}건`}
+          note="최근 지원 현황"
+          icon={Send}
+        />
         <StatCard
           label="서류 합격"
           value={`${myApplications.filter((application) => application.status === '서류 합격').length}건`}
@@ -50,7 +64,7 @@ const HomeView = () => {
       <section>
         <div className="mb-4 flex items-end justify-between">
           <div>
-            <p className="text-sm font-semibold text-primary">추천 공고</p>
+            <p className="text-primary text-sm font-semibold">추천 공고</p>
             <h2 className="mt-1 text-2xl font-bold">놓치면 아쉬운 채용 소식</h2>
           </div>
           <Button variant="ghost" onClick={() => (window.location.href = '/jobs')}>

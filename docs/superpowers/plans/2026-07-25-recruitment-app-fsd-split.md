@@ -22,6 +22,7 @@
 ### Task 1: 공유 채용 엔티티와 목업 Provider 추가
 
 **Files:**
+
 - Create: packages/core/src/entities/index.ts
 - Create: packages/core/src/entities/recruitment/model/types.ts
 - Create: packages/core/src/entities/recruitment/model/mock-data.ts
@@ -30,12 +31,13 @@
 - Modify: packages/core/package.json
 
 **Interfaces:**
+
 - Produces: JobType, ApplicationType, RecruitmentProvider, useRecruitment
 - Consumes: React createContext, useContext, useState
 
 - [ ] **Step 1: 공통 타입을 정의한다**
 
-~~~typescript
+```typescript
 export type JobStatusType = '모집중' | '마감';
 export type ApplicationStatusType = '지원 완료' | '서류 합격' | '서류 불합격';
 
@@ -63,7 +65,7 @@ export interface ApplicationType {
   phone: string;
   status: ApplicationStatusType;
 }
-~~~
+```
 
 ApplicationType에는 id, name, studentId, company, position, date, email, phone, status를 포함한다.
 
@@ -73,7 +75,7 @@ ApplicationType에는 id, name, studentId, company, position, date, email, phone
 
 - [ ] **Step 3: 앱별로 독립적인 목업 상태 Provider를 구현한다**
 
-~~~tsx
+```tsx
 'use client';
 
 interface RecruitmentContextType {
@@ -99,7 +101,7 @@ export const useRecruitment = () => {
   if (!context) throw new Error('RecruitmentProvider 내부에서 사용해야 합니다.');
   return context;
 };
-~~~
+```
 
 - [ ] **Step 4: core 공개 API를 추가한다**
 
@@ -113,41 +115,52 @@ Expected: 두 명령이 모두 exit code 0으로 끝난다.
 
 - [ ] **Step 6: 커밋한다**
 
-~~~bash
+```bash
 git add packages/core/package.json packages/core/src/entities
 git commit -m "add(recruitment): 공통 목업 엔티티 추가"
-~~~
+```
 
 ### Task 2: 디자인 시스템에 공통 레이아웃 프레임 추가
 
 **Files:**
+
 - Create: packages/ui/src/ui/app-shell.tsx
 - Create: packages/ui/src/ui/brand-logo.tsx
 - Create: packages/ui/src/ui/stat-card.tsx
 - Modify: packages/ui/src/index.ts
 
 **Interfaces:**
+
 - Produces: AppShell, AppHeader, AppSidebar, AppMain, BrandLogo, StatCard
 - Consumes: React children, LucideIcon, existing Card and cn
 
 - [ ] **Step 1: 라우트·역할을 모르는 shell 컴포넌트를 만든다**
 
-~~~tsx
-interface AppShellProps { children: React.ReactNode; }
-interface AppHeaderProps { children: React.ReactNode; }
-interface AppSidebarProps { children: React.ReactNode; mobile?: boolean; }
-interface AppMainProps { children: React.ReactNode; }
+```tsx
+interface AppShellProps {
+  children: React.ReactNode;
+}
+interface AppHeaderProps {
+  children: React.ReactNode;
+}
+interface AppSidebarProps {
+  children: React.ReactNode;
+  mobile?: boolean;
+}
+interface AppMainProps {
+  children: React.ReactNode;
+}
 
 export const AppShell = ({ children }: AppShellProps) => (
-  <div className="min-h-screen bg-background text-foreground">{children}</div>
+  <div className="bg-background text-foreground min-h-screen">{children}</div>
 );
-~~~
+```
 
 AppHeader는 sticky 64px header, AppSidebar는 데스크톱 240px 또는 모바일 전체 너비, AppMain은 반응형 본문 여백만 책임진다. 메뉴·링크·사용자 정보는 children으로 주입한다.
 
 - [ ] **Step 2: 로고와 지표 카드 UI를 만든다**
 
-~~~tsx
+```tsx
 interface BrandLogoProps {
   imageSrc: string;
   name: string;
@@ -160,17 +173,17 @@ interface StatCardProps {
   note: string;
   icon: LucideIcon;
 }
-~~~
+```
 
 BrandLogo는 generic img 요소로 로고 URL을 출력한다. StatCard는 기존 Card primitive를 조합하며 비즈니스 계산은 하지 않는다.
 
 - [ ] **Step 3: UI 공개 API에 export를 추가한다**
 
-~~~typescript
+```typescript
 export * from './ui/app-shell';
 export * from './ui/brand-logo';
 export * from './ui/stat-card';
-~~~
+```
 
 - [ ] **Step 4: UI를 빌드·검증한다**
 
@@ -180,14 +193,15 @@ Expected: dist에 JS·d.ts·CSS가 생성되고 검사에 실패하지 않는다
 
 - [ ] **Step 5: 커밋한다**
 
-~~~bash
+```bash
 git add packages/ui/src packages/ui/dist
 git commit -m "add(ui): 공통 앱 레이아웃 프레임 추가"
-~~~
+```
 
 ### Task 3: client 앱 레이아웃·라우트·학생 네비게이션 구성
 
 **Files:**
+
 - Modify: apps/client/src/app/providers.tsx
 - Modify: apps/client/src/app/layout.tsx
 - Modify: apps/client/src/app/page.tsx
@@ -199,29 +213,30 @@ git commit -m "add(ui): 공통 앱 레이아웃 프레임 추가"
 - Create: apps/client/src/widgets/app-navigation/index.ts
 
 **Interfaces:**
+
 - Consumes: RecruitmentProvider, AppShell, AppHeader, AppSidebar, AppMain, BrandLogo
 - Produces: 학생 메뉴와 네 개의 route entry
 
 - [ ] **Step 1: QueryClientProvider 내부에 RecruitmentProvider를 적용한다**
 
-~~~tsx
+```tsx
 <QueryClientProvider client={queryClient}>
   <RecruitmentProvider>{children}</RecruitmentProvider>
   <ReactQueryDevtools initialIsOpen={false} />
   <Toaster position="top-center" richColors />
 </QueryClientProvider>
-~~~
+```
 
 - [ ] **Step 2: 학생 메뉴를 링크 데이터로 정의한다**
 
-~~~typescript
+```typescript
 export const clientNavigationItems = [
   { href: '/', label: '홈', icon: LayoutDashboard },
   { href: '/jobs', label: '채용 공고', icon: BriefcaseBusiness },
   { href: '/applications', label: '지원 현황', icon: FileText },
   { href: '/profile', label: '내 정보', icon: CircleUserRound },
 ] as const;
-~~~
+```
 
 - [ ] **Step 3: AppNavigation을 만든다**
 
@@ -229,23 +244,23 @@ usePathname과 next/link로 active 상태를 계산한다. 이 widget만 모바�
 
 - [ ] **Step 4: RootLayout에서 navigation widget으로 route children을 감싼다**
 
-~~~tsx
+```tsx
 <Providers>
   <AppNavigation>{children}</AppNavigation>
 </Providers>
-~~~
+```
 
 AppNavigation은 AppShell과 AppMain 안에 children을 렌더링한다. 이로써 모든 학생 route가 같은 header/sidebar frame과 Provider 상태를 공유한다.
 
 - [ ] **Step 5: 라우트 파일을 view의 얇은 진입점으로 만든다**
 
-~~~tsx
+```tsx
 import { JobsView } from '@/views/jobs';
 
 const JobsPage = () => <JobsView />;
 
 export default JobsPage;
-~~~
+```
 
 루트는 HomeView, 나머지는 ApplicationsView와 ProfileView를 각각 하나씩만 import한다.
 
@@ -257,14 +272,15 @@ Expected: 네 route type이 생성되고 cross-layer import가 없다.
 
 - [ ] **Step 7: 커밋한다**
 
-~~~bash
+```bash
 git add apps/client/src/app apps/client/src/widgets/app-navigation
 git commit -m "add(client): 학생 앱 레이아웃과 라우트 추가"
-~~~
+```
 
 ### Task 4: client 도메인 UI·기능·views 분리
 
 **Files:**
+
 - Create: apps/client/src/entities/job/ui/JobCard.tsx
 - Create: apps/client/src/entities/application/ui/StatusBadge.tsx
 - Create: apps/client/src/entities/job/index.ts
@@ -282,12 +298,13 @@ git commit -m "add(client): 학생 앱 레이아웃과 라우트 추가"
 - Create: index.ts files for each view
 
 **Interfaces:**
+
 - Consumes: shared types/state and UI primitives
 - Produces: four student views and preserved v0 interactions
 
 - [ ] **Step 1: entity UI를 구현한다**
 
-~~~tsx
+```tsx
 interface JobCardProps {
   job: JobType;
   onOpen: (job: JobType) => void;
@@ -296,7 +313,7 @@ interface JobCardProps {
 interface StatusBadgeProps {
   status: JobStatusType | ApplicationStatusType;
 }
-~~~
+```
 
 JobCard에는 D-day·회사·포지션·고용 형태를, StatusBadge에는 상태별 색상만 둔다. mutation과 route navigation을 넣지 않는다.
 
@@ -320,14 +337,15 @@ Expected: /, /jobs, /applications, /profile이 빌드되고 중복 지원이 거
 
 - [ ] **Step 6: 커밋한다**
 
-~~~bash
+```bash
 git add apps/client/src/entities apps/client/src/features apps/client/src/widgets/job-detail apps/client/src/views
 git commit -m "add(client): 학생 채용 화면 분리"
-~~~
+```
 
 ### Task 5: admin 앱 레이아웃·라우트·관리자 네비게이션 구성
 
 **Files:**
+
 - Modify: apps/admin/src/app/providers.tsx
 - Modify: apps/admin/src/app/layout.tsx
 - Modify: apps/admin/src/app/page.tsx
@@ -338,6 +356,7 @@ git commit -m "add(client): 학생 채용 화면 분리"
 - Create: apps/admin/src/widgets/app-navigation/index.ts
 
 **Interfaces:**
+
 - Consumes: RecruitmentProvider and shared shell
 - Produces: 관리자 메뉴와 세 route entry
 
@@ -347,13 +366,13 @@ Task 3과 같은 위치에 넣어 admin 앱 내부 route 간 목업 상태를 �
 
 - [ ] **Step 2: 관리자 메뉴를 정의한다**
 
-~~~typescript
+```typescript
 export const adminNavigationItems = [
   { href: '/', label: '대시보드', icon: LayoutDashboard },
   { href: '/postings', label: '공고 관리', icon: BriefcaseBusiness },
   { href: '/applicants', label: '지원자 관리', icon: UsersRound },
 ] as const;
-~~~
+```
 
 - [ ] **Step 3: 관리자 AppNavigation을 구현한다**
 
@@ -361,11 +380,11 @@ export const adminNavigationItems = [
 
 - [ ] **Step 4: RootLayout에서 관리자 AppNavigation으로 route children을 감싼다**
 
-~~~tsx
+```tsx
 <Providers>
   <AppNavigation>{children}</AppNavigation>
 </Providers>
-~~~
+```
 
 - [ ] **Step 5: 세 route entry를 얇게 구현한다**
 
@@ -379,14 +398,15 @@ Expected: /, /postings, /applicants route type이 생성된다.
 
 - [ ] **Step 7: 커밋한다**
 
-~~~bash
+```bash
 git add apps/admin/src/app apps/admin/src/widgets/app-navigation
 git commit -m "add(admin): 관리자 앱 레이아웃과 라우트 추가"
-~~~
+```
 
 ### Task 6: admin 도메인 UI·기능·views 분리
 
 **Files:**
+
 - Create: apps/admin/src/entities/job/ui/StatusBadge.tsx
 - Create: apps/admin/src/entities/application/ui/StatusBadge.tsx
 - Create: apps/admin/src/entities/job/index.ts
@@ -403,6 +423,7 @@ git commit -m "add(admin): 관리자 앱 레이아웃과 라우트 추가"
 - Create: index.ts files for each view
 
 **Interfaces:**
+
 - Consumes: shared types/state and UI primitives
 - Produces: dashboard, posting management, applicant management views
 
@@ -416,10 +437,14 @@ git commit -m "add(admin): 관리자 앱 레이아웃과 라우트 추가"
 
 - [ ] **Step 3: JobStatusButton과 ApplicantResultButtons를 구현한다**
 
-~~~tsx
-interface JobStatusButtonProps { job: JobType; }
-interface ApplicantResultButtonsProps { application: ApplicationType; }
-~~~
+```tsx
+interface JobStatusButtonProps {
+  job: JobType;
+}
+interface ApplicantResultButtonsProps {
+  application: ApplicationType;
+}
+```
 
 JobStatusButton은 모집중/마감을 전환한다. ApplicantResultButtons는 합격 또는 불합격 상태를 저장하고 원래의 결과 toast를 보인다.
 
@@ -435,17 +460,19 @@ Expected: 새 공고가 최상단에 나타나고 상태 변경이 반영되며 
 
 - [ ] **Step 6: 커밋한다**
 
-~~~bash
+```bash
 git add apps/admin/src/entities apps/admin/src/features apps/admin/src/views
 git commit -m "add(admin): 채용 관리 화면 분리"
-~~~
+```
 
 ### Task 7: 전체 통합 검증
 
 **Files:**
+
 - Modify: 검증에서 발견된 직접 회귀 파일만 수정
 
 **Interfaces:**
+
 - Consumes: Tasks 1–6
 - Produces: 검증된 두 앱 구현
 
@@ -457,12 +484,12 @@ Expected: packages/ui/dist가 source와 일치한다.
 
 - [ ] **Step 2: 저장소 전체 검증을 실행한다**
 
-~~~bash
+```bash
 pnpm lint
 pnpm lint:fsd
 pnpm check-types
 pnpm build
-~~~
+```
 
 Expected: 네 명령이 모두 exit code 0이다.
 
@@ -472,9 +499,9 @@ client에서 /, /jobs, /applications, /profile을, admin에서 /, /postings, /ap
 
 - [ ] **Step 4: 실제 회귀 수정이 있을 때만 커밋한다**
 
-~~~bash
+```bash
 git add <verified-fix-files>
 git commit -m "fix(recruitment): 통합 검증 오류 수정"
-~~~
+```
 
 검증 수정이 없으면 이 커밋은 만들지 않는다.

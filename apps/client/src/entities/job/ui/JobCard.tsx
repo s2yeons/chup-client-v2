@@ -10,12 +10,12 @@ interface JobCardProps {
 const JobCard = ({ job, onOpen }: JobCardProps) => {
   return (
     <Card
-      className="group cursor-pointer border-border/80 transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
+      className="group border-border/80 hover:border-primary/30 cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-md"
       onClick={() => onOpen(job)}
     >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-3">
-          <div className="flex size-11 items-center justify-center rounded-xl bg-secondary text-lg font-bold text-primary">
+          <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-xl text-lg font-bold">
             {job.company.slice(0, 1)}
           </div>
           <Badge variant={job.dday <= 5 && job.dday >= 0 ? 'destructive' : 'secondary'}>
@@ -35,7 +35,7 @@ const JobCard = ({ job, onOpen }: JobCardProps) => {
             </Badge>
           ))}
         </div>
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
+        <div className="text-muted-foreground flex items-center justify-between text-sm">
           <span>{job.employment}</span>
           <span className="flex items-center gap-1">
             <CalendarDays className="size-4" />

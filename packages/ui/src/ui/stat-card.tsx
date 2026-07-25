@@ -14,11 +14,11 @@ function StatCard({ label, value, note, icon: Icon }: StatCardProps) {
     <Card>
       <CardContent className="flex items-start justify-between p-5">
         <div>
-          <p className="text-sm text-muted-foreground">{label}</p>
+          <p className="text-muted-foreground text-sm">{label}</p>
           <p className="mt-1 text-2xl font-bold">{value}</p>
-          <p className="mt-2 text-xs text-muted-foreground">{note}</p>
+          <p className="text-muted-foreground mt-2 text-xs">{note}</p>
         </div>
-        <div className="rounded-xl bg-primary/10 p-2.5 text-primary">
+        <div className="bg-primary/10 text-primary rounded-xl p-2.5">
           <Icon className="size-5" />
         </div>
       </CardContent>

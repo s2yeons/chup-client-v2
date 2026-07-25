@@ -11,7 +11,11 @@ const StatusBadge = ({ status }: StatusBadgeProps) => {
   }
 
   if (status === '서류 불합격') {
-    return <Badge variant="secondary" className="text-muted-foreground">서류 불합격</Badge>;
+    return (
+      <Badge variant="secondary" className="text-muted-foreground">
+        서류 불합격
+      </Badge>
+    );
   }
 
   if (status === '마감') {

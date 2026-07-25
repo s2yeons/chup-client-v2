@@ -27,13 +27,15 @@ const JobsView = () => {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <p className="text-sm font-semibold text-primary">채용 공고</p>
+        <p className="text-primary text-sm font-semibold">채용 공고</p>
         <h1 className="mt-1 text-3xl font-bold">나에게 맞는 기회를 찾아보세요</h1>
-        <p className="mt-2 text-muted-foreground">학교로 전달된 모든 공고를 빠르게 확인할 수 있어요.</p>
+        <p className="text-muted-foreground mt-2">
+          학교로 전달된 모든 공고를 빠르게 확인할 수 있어요.
+        </p>
       </div>
-      <div className="flex flex-col gap-3 rounded-2xl border bg-card p-4 sm:flex-row">
+      <div className="bg-card flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row">
         <div className="relative flex-1">
-          <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -55,7 +57,7 @@ const JobsView = () => {
         </div>
       </div>
       <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           총 <strong className="text-foreground">{filteredJobs.length}개</strong>의 공고
         </p>
         <Button variant="ghost" size="sm" onClick={() => undefined}>

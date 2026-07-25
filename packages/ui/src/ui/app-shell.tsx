@@ -3,14 +3,14 @@ import * as React from 'react';
 import { cn } from '../lib/utils';
 
 function AppShell({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div className={cn('min-h-screen bg-background text-foreground', className)} {...props} />;
+  return <div className={cn('bg-background text-foreground min-h-screen', className)} {...props} />;
 }
 
 function AppHeader({ className, ...props }: React.ComponentProps<'header'>) {
   return (
     <header
       className={cn(
-        'sticky top-0 z-20 flex h-16 items-center justify-between border-b bg-background/95 px-4 backdrop-blur md:px-6',
+        'bg-background/95 sticky top-0 z-20 flex h-16 items-center justify-between border-b px-4 backdrop-blur md:px-6',
         className,
       )}
       {...props}
@@ -26,7 +26,9 @@ function AppSidebar({ className, mobile = false, ...props }: AppSidebarProps) {
   return (
     <aside
       className={cn(
-        mobile ? 'flex h-full w-full flex-col' : 'hidden w-60 shrink-0 border-r bg-sidebar md:flex md:flex-col',
+        mobile
+          ? 'flex h-full w-full flex-col'
+          : 'bg-sidebar hidden w-60 shrink-0 border-r md:flex md:flex-col',
         className,
       )}
       {...props}

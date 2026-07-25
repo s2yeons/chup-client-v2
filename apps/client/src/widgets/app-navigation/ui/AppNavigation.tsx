@@ -34,7 +34,7 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
   const navigationContent = (mobile = false) => (
     <AppSidebar mobile={mobile}>
       <div className="flex flex-1 flex-col gap-1 p-3">
-        <p className="px-3 pt-3 pb-2 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+        <p className="text-muted-foreground px-3 pt-3 pb-2 text-xs font-semibold tracking-wider uppercase">
           학생 메뉴
         </p>
         {clientNavigationItems.map(({ href, icon: Icon, label }) => (
@@ -55,13 +55,13 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
         ))}
       </div>
       <div className="p-3">
-        <div className="rounded-2xl bg-secondary p-3">
+        <div className="bg-secondary rounded-2xl p-3">
           <p className="text-sm font-semibold">김도윤</p>
-          <p className="text-xs text-muted-foreground">2314 · 학생</p>
+          <p className="text-muted-foreground text-xs">2314 · 학생</p>
         </div>
         <Button
           variant="ghost"
-          className="mt-2 w-full justify-start text-muted-foreground"
+          className="text-muted-foreground mt-2 w-full justify-start"
           onClick={() => toast.info('로그아웃 기능은 준비 중입니다.')}
         >
           <LogOut />
@@ -107,14 +107,22 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
         </AppMain>
       </div>
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-foreground/20" onMouseDown={() => setIsMobileMenuOpen(false)}>
+        <div
+          className="bg-foreground/20 fixed inset-0 z-50"
+          onMouseDown={() => setIsMobileMenuOpen(false)}
+        >
           <div
-            className="h-full w-72 bg-background p-2 shadow-xl"
+            className="bg-background h-full w-72 p-2 shadow-xl"
             onMouseDown={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between p-3">
               <BrandLogo imageSrc={CLIENT_LOGO_URL} name="GSM Career" />
-              <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)} aria-label="메뉴 닫기">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMobileMenuOpen(false)}
+                aria-label="메뉴 닫기"
+              >
                 <X />
               </Button>
             </div>

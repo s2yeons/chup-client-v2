@@ -23,7 +23,7 @@ const ResumeReplaceInput = ({ onChange }: ResumeReplaceInputProps) => {
   };
 
   return (
-    <label className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg border bg-background px-3 text-sm font-medium">
+    <label className="bg-background inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg border px-3 text-sm font-medium">
       <input
         key={inputKey}
         type="file"
