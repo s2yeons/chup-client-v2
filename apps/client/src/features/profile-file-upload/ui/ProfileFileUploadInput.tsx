@@ -1,5 +1,7 @@
 'use client';
 
+import { toast } from 'sonner';
+
 interface ProfileFileUploadInputProps {
   disabled: boolean;
   onAdd: (fileName: string) => void;
@@ -7,9 +9,15 @@ interface ProfileFileUploadInputProps {
 
 const ProfileFileUploadInput = ({ disabled, onAdd }: ProfileFileUploadInputProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fileName = event.target.files?.[0]?.name;
+    const file = event.target.files?.[0];
 
-    if (fileName) onAdd(fileName);
+    if (file && file.type !== 'application/pdf') {
+      toast.error('PDF 파일만 추가할 수 있습니다.');
+      event.target.value = '';
+      return;
+    }
+
+    if (file) onAdd(file.name);
     event.target.value = '';
   };
 

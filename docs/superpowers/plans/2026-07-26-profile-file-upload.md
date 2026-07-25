@@ -160,7 +160,7 @@ const ProfileFileUploadInput = ({ disabled, onAdd }: ProfileFileUploadInputProps
 };
 ```
 
-Add `export const isProfileFileLimitReached = (files: ProfileFileType[]) => files.length >= MAX_PROFILE_FILE_COUNT;` to `profileFiles.ts`. In `ProfileView`, initialize `useState<ProfileFileType[]>(initialProfileFiles)`, pass `isProfileFileLimitReached(files)` to the input, and call `addProfileFile` with `crypto.randomUUID()` for each selected filename. Render each file with `FileText`, its name, and an accessible destructive icon button that calls `removeProfileFile`. Change the card copy to `첨부 파일`, `PDF 파일을 최대 3개까지 등록할 수 있습니다.`, and show `최대 3개까지 등록할 수 있습니다.` only when the limit is reached.
+Add `export const isProfileFileLimitReached = (files: ProfileFileType[]) => files.length >= MAX_PROFILE_FILE_COUNT;` to `profileFiles.ts`. In `ProfileView`, initialize `useState<ProfileFileType[]>(initialProfileFiles)`, pass `isProfileFileLimitReached(files)` to the input, and call `addProfileFile` with `crypto.randomUUID()` for each selected filename. `ProfileFileUploadInput`은 `file.type === 'application/pdf'`일 때만 `onAdd`를 호출하고, 그 외 MIME은 입력을 초기화한 뒤 오류 토스트를 표시한다. Render each file with `FileText`, its name, and an accessible destructive icon button that calls `removeProfileFile`. Change the card copy to `첨부 파일`, `PDF 파일을 최대 3개까지 등록할 수 있습니다.`, and show `최대 3개까지 등록할 수 있습니다.` only when the limit is reached.
 
 - [ ] **Step 4: Run test to verify it passes**
 
