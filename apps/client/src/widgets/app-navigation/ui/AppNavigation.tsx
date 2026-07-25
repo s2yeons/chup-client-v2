@@ -24,11 +24,11 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
   const navigationContent = (mobile = false) => (
     <AppSidebar mobile={mobile}>
       {!mobile && (
-        <div className="flex shrink-0 items-center px-5 pt-5">
+        <div className="flex h-16 shrink-0 items-center px-5">
           <BrandLogo imageSrc={CLIENT_LOGO_URL} name="GSM Career" />
         </div>
       )}
-      <div className="flex flex-1 flex-col gap-1 p-3">
+      <div className="flex flex-1 flex-col gap-1 p-3 pt-0">
         <p className="text-muted-foreground px-3 pt-3 pb-2 text-xs font-semibold tracking-wider uppercase">
           학생 메뉴
         </p>
@@ -70,7 +70,7 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
     <AppShell>
       {navigationContent()}
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-        <header className="bg-background/95 z-20 flex h-16 shrink-0 items-center gap-3 border-b px-4 backdrop-blur md:hidden">
+        <header className="bg-sidebar z-20 flex h-16 shrink-0 items-center gap-3 border-b px-4 backdrop-blur md:hidden">
           <Button
             variant="ghost"
             size="icon"
@@ -91,10 +91,10 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
           onMouseDown={() => setIsMobileMenuOpen(false)}
         >
           <div
-            className="bg-background h-full w-72 p-2 shadow-xl"
+            className="bg-sidebar h-full w-72 shadow-xl"
             onMouseDown={(event) => event.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-3">
+            <div className="flex h-16 items-center justify-between px-5">
               <BrandLogo imageSrc={CLIENT_LOGO_URL} name="GSM Career" />
               <Button
                 variant="ghost"
