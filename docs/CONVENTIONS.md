@@ -41,7 +41,7 @@ src/
 
 **예외**: `app`과 `shared`는 레이어이면서 동시에 슬라이스다. 비즈니스 도메인으로 나뉘지 않기 때문이며, 이 두 레이어는 세그먼트끼리 자유롭게 import할 수 있다. 예를 들어 `shared/api/client.ts`가 `shared/lib`, `shared/config`를 참조하는 것은 규칙 위반이 아니다.
 
-현재는 이 규칙을 자동 검사하지 않는다. 슬라이스가 10개를 넘어가면 [`steiger`](https://github.com/feature-sliced/steiger) 도입을 검토한다.
+`pnpm lint:fsd`가 [`steiger`](https://github.com/feature-sliced/steiger)로 표준 FSD 레이어를 검사한다. Next.js 충돌 회피용 비표준 `views` 레이어는 `scripts/check-fsd-dependencies.mjs`가 같은 의존 방향과 동일 레이어 슬라이스 import를 검사한다.
 
 ## 🗂️ 파일/폴더 네이밍
 
@@ -369,5 +369,5 @@ pnpm lint
 | --------------------- | ----------------------------------- | ---------------------------------------------------------------- |
 | 토큰 저장             | JS로 읽히는 쿠키 → XSS 시 탈취 가능 | 보안 요구가 올라가면 httpOnly 쿠키 + Route Handler 프록시로 전환 |
 | 메서드 래퍼 body 타입 | `any` (위 참조)                     | 인라인 body로 인한 버그가 실제로 발생하면 명시 시그니처로 교체   |
-| FSD import 규칙       | 자동 검사 없음                      | 슬라이스 10개 초과 시 `steiger` 도입                             |
+| FSD import 규칙       | `pnpm lint:fsd`                     | Steiger + `views` 전용 의존성 검사                               |
 | 서버 토큰 갱신        | 없음                                | Server Action에서 갱신이 필요해지면 `cookies().set()`으로 확장   |

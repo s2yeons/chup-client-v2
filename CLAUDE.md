@@ -228,6 +228,7 @@ export type JobRegistrationReqType = z.infer<typeof JobRegistrationSchema>;
 ```bash
 pnpm build        # turbo run build — 타입체크 포함
 pnpm lint         # turbo run lint
+pnpm lint:fsd     # Steiger + views 의존성 검사
 pnpm check-types  # turbo run check-types
 ```
 
@@ -237,7 +238,7 @@ pnpm check-types  # turbo run check-types
 
 - 토큰이 JS로 읽히는 쿠키에 저장됨 → XSS 시 탈취 가능. httpOnly + Route Handler 프록시가 정석이나 현재는 미적용
 - FSD `app` 레이어를 각 앱의 Next `src/app`과 합침. 분리하면 라우팅 파일과 Provider가 흩어져 손해
-- 레이어 import 규칙은 자동 검사 없음(눈으로 확인). 슬라이스가 10개를 넘으면 `steiger` 도입 검토
+- 레이어 import 규칙은 `pnpm lint:fsd`로 검사. Steiger가 표준 FSD 레이어를, `scripts/check-fsd-dependencies.mjs`가 비표준 `views` 레이어를 검사
 - FSD `shared` 레이어가 두 곳에 나뉨: `@chup/core/shared`(api·lib·config) + `@chup/ui`(디자인 시스템). 빌드 모델 차이(소스 vs prebuilt) 때문
 - double-preflight: `@chup/ui/styles.css`와 앱 `globals.css`가 각각 Tailwind preflight 포함 → CSS 소폭 중복(멱등, 무해)
 - dev 중 `@chup/ui` 컴포넌트 수정 시 자동 재빌드 없음(1회 빌드) — 잦아지면 ui에 `build:watch` dev 스크립트 추가 검토
