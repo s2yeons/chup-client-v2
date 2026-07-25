@@ -62,9 +62,6 @@ const PostingsView = () => {
     const file = event.target.files?.[0];
 
     if (file && file.type !== 'application/pdf') toast.error('PDF 파일만 추가할 수 있습니다.');
-    if (file?.type === 'application/pdf' && attachments.length === 3) {
-      toast.error('첨부파일은 최대 3개까지 등록할 수 있습니다.');
-    }
     if (file?.type === 'application/pdf' && attachments.length < 3) {
       setAttachments((currentAttachments) => [...currentAttachments, file]);
     }
