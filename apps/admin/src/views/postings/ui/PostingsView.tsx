@@ -146,6 +146,7 @@ const PostingsView = () => {
                   key={position}
                   variant={positions.includes(position) ? 'default' : 'outline'}
                   onClick={() => togglePosition(position)}
+                  aria-pressed={positions.includes(position)}
                 >
                   {position}
                 </Button>
@@ -153,7 +154,11 @@ const PostingsView = () => {
               {positions
                 .filter((position) => !POSITION_OPTIONS.includes(position))
                 .map((position) => (
-                  <Button key={position} onClick={() => togglePosition(position)}>
+                  <Button
+                    key={position}
+                    onClick={() => togglePosition(position)}
+                    aria-label={`${position} 삭제`}
+                  >
                     {position}
                     <X />
                   </Button>
