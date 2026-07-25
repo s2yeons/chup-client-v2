@@ -2,9 +2,17 @@
 
 import { useState } from 'react';
 
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chup/ui';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Input,
+  toast,
+} from '@chup/ui';
 import { FileText, Trash2 } from 'lucide-react';
-import { toast } from 'sonner';
 
 import { ProfileFileUploadInput } from '@/features/profile-file-upload';
 import {
@@ -15,8 +23,20 @@ import {
   removeProfileFile,
 } from '@/views/profile/model/profileFiles';
 
+const formatPhoneNumber = (phoneNumber: string) => {
+  const digits = phoneNumber.replace(/\D/g, '');
+
+  if (!/^010\d{7,8}$/.test(digits)) return null;
+
+  return digits.length === 11
+    ? `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`
+    : `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+};
+
 const ProfileView = () => {
   const [files, setFiles] = useState<ProfileFileType[]>(initialProfileFiles);
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [savedPhoneNumber, setSavedPhoneNumber] = useState<string>('');
 
   const isLimitReached = isProfileFileLimitReached(files);
 
@@ -32,6 +52,19 @@ const ProfileView = () => {
     toast.success('파일이 삭제되었습니다.');
   };
 
+  const handlePhoneSave = () => {
+    const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+
+    if (!formattedPhoneNumber) {
+      toast.error('010으로 시작하는 휴대폰 번호를 입력해주세요.');
+      return;
+    }
+
+    setPhoneNumber(formattedPhoneNumber);
+    setSavedPhoneNumber(formattedPhoneNumber);
+    toast.success('전화번호가 저장되었습니다.');
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -42,20 +75,43 @@ const ProfileView = () => {
       <Card>
         <CardHeader>
           <CardTitle>기본 정보</CardTitle>
-          <CardDescription>DataGSM 계정에서 연동된 정보입니다.</CardDescription>
+          <CardDescription>이름, 학번, 이메일은 DataGSM 계정에서 연동됩니다.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-5 sm:grid-cols-2">
           {[
             ['이름', '김도윤'],
             ['학번', '2314'],
             ['이메일', 'doyun@gsm.hs.kr'],
-            ['전화번호', '010-2381-7721'],
           ].map(([label, value]) => (
             <div key={label}>
               <p className="text-muted-foreground text-sm">{label}</p>
               <p className="mt-1 font-medium">{value}</p>
             </div>
           ))}
+          <div>
+            <label htmlFor="phone-number" className="text-muted-foreground text-sm">
+              전화번호
+            </label>
+            <div className="mt-1 flex gap-2">
+              <div className="min-w-0 flex-1">
+                <Input
+                  id="phone-number"
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={(event) => setPhoneNumber(event.target.value.replace(/\D/g, '').slice(0, 11))}
+                  placeholder="전화번호를 입력해주세요"
+                  inputMode="numeric"
+                />
+              </div>
+              <Button
+                type="button"
+                disabled={!phoneNumber.trim() || phoneNumber === savedPhoneNumber}
+                onClick={handlePhoneSave}
+              >
+                저장
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
       <Card>
