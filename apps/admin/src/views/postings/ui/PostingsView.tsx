@@ -5,45 +5,103 @@ import { useState } from 'react';
 import { useRecruitment } from '@chup/core/entities';
 import {
   Button,
+  Calendar,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
   Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   toast,
 } from '@chup/ui';
-import { Plus, Search, X } from 'lucide-react';
+import { CalendarDays, Plus, Search, X } from 'lucide-react';
 
 import { StatusBadge } from '@/entities/application';
 import { JobStatusButton } from '@/features/job-status';
+
+const POSITION_OPTIONS = ['프론트엔드', '백엔드', 'DevOps', 'AI', '클라우드'];
 
 const PostingsView = () => {
   const { jobs, setJobs } = useRecruitment();
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [company, setCompany] = useState<string>('');
-  const [position, setPosition] = useState<string>('');
+  const [positions, setPositions] = useState<string[]>([]);
+  const [customPosition, setCustomPosition] = useState<string>('');
+  const [deadline, setDeadline] = useState<Date | undefined>();
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const [isDeadlinePickerOpen, setIsDeadlinePickerOpen] = useState<boolean>(false);
+
+  const togglePosition = (position: string) =>
+    setPositions((currentPositions) =>
+      currentPositions.includes(position)
+        ? currentPositions.filter((currentPosition) => currentPosition !== position)
+        : [...currentPositions, position],
+    );
+
+  const addCustomPosition = () => {
+    const position = customPosition.trim();
+
+    if (!position || positions.includes(position)) return;
+
+    setPositions((currentPositions) => [...currentPositions, position]);
+    setCustomPosition('');
+  };
+
+  const formatDeadline = (date: Date) =>
+    `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+
+  const handleDeadlineSelect = (date: Date | undefined) => {
+    setDeadline(date);
+    setIsDeadlinePickerOpen(false);
+  };
+
+  const handleAttachmentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (file && file.type !== 'application/pdf') toast.error('PDF 파일만 추가할 수 있습니다.');
+    if (file?.type === 'application/pdf' && attachments.length === 3) {
+      toast.error('첨부파일은 최대 3개까지 등록할 수 있습니다.');
+    }
+    if (file?.type === 'application/pdf' && attachments.length < 3) {
+      setAttachments((currentAttachments) => [...currentAttachments, file]);
+    }
+    event.target.value = '';
+  };
+
   const createPosting = () => {
-    if (!company || !position) {
-      toast.error('회사명과 포지션을 입력해주세요.');
+    if (!company.trim() || positions.length === 0 || !deadline) {
+      toast.error('회사명, 모집 포지션, 마감일을 입력해주세요.');
       return;
     }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const selectedDeadline = new Date(deadline);
+    selectedDeadline.setHours(0, 0, 0, 0);
+
     setJobs((currentJobs) => [
       {
         id: Date.now(),
-        company,
+        company: company.trim(),
         description: '새롭게 등록된 채용 공고입니다.',
-        positions: [position],
+        positions,
         employment: '정규직',
-        deadline: '2026.08.20',
-        dday: 31,
+        deadline: formatDeadline(deadline),
+        dday: Math.ceil((selectedDeadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)),
         applicants: 0,
         status: '모집중',
+        attachments: attachments.map((file) => file.name),
       },
       ...currentJobs,
     ]);
     setCompany('');
-    setPosition('');
+    setPositions([]);
+    setCustomPosition('');
+    setDeadline(undefined);
+    setAttachments([]);
     setIsFormOpen(false);
     toast.success('공고가 등록되고 디스코드 알림이 전송되었습니다.');
   };
@@ -85,11 +143,81 @@ const PostingsView = () => {
               onChange={(event) => setCompany(event.target.value)}
               placeholder="회사명"
             />
-            <Input
-              value={position}
-              onChange={(event) => setPosition(event.target.value)}
-              placeholder="모집 포지션"
-            />
+            <div className="flex flex-wrap gap-2">
+              {POSITION_OPTIONS.map((position) => (
+                <Button
+                  key={position}
+                  variant={positions.includes(position) ? 'default' : 'outline'}
+                  onClick={() => togglePosition(position)}
+                >
+                  {position}
+                </Button>
+              ))}
+              {positions
+                .filter((position) => !POSITION_OPTIONS.includes(position))
+                .map((position) => (
+                  <Button key={position} onClick={() => togglePosition(position)}>
+                    {position}
+                    <X />
+                  </Button>
+                ))}
+            </div>
+            <div className="flex gap-2">
+              <Input
+                value={customPosition}
+                onChange={(event) => setCustomPosition(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault();
+                    addCustomPosition();
+                  }
+                }}
+                placeholder="직접 입력"
+              />
+              <Button variant="outline" onClick={addCustomPosition}>
+                추가
+              </Button>
+            </div>
+            <Popover open={isDeadlinePickerOpen} onOpenChange={setIsDeadlinePickerOpen}>
+              <PopoverTrigger render={<Button variant="outline" />}>
+                <CalendarDays />
+                {deadline ? formatDeadline(deadline) : '마감일을 선택해주세요'}
+              </PopoverTrigger>
+              <PopoverContent align="start">
+                <Calendar mode="single" selected={deadline} onSelect={handleDeadlineSelect} />
+              </PopoverContent>
+            </Popover>
+            <div className="space-y-2 sm:col-span-2">
+              <Input
+                type="file"
+                accept="application/pdf"
+                disabled={attachments.length === 3}
+                onChange={handleAttachmentChange}
+              />
+              {attachments.length === 3 && (
+                <p className="text-muted-foreground text-sm">최대 3개까지 등록할 수 있습니다</p>
+              )}
+              {attachments.map((file) => (
+                <div
+                  key={`${file.name}-${file.lastModified}`}
+                  className="flex items-center justify-between"
+                >
+                  <span className="text-sm">{file.name}</span>
+                  <Button
+                    variant="ghost"
+                    size="icon-xs"
+                    onClick={() =>
+                      setAttachments((currentAttachments) =>
+                        currentAttachments.filter((attachment) => attachment !== file),
+                      )
+                    }
+                    aria-label={`${file.name} 삭제`}
+                  >
+                    <X />
+                  </Button>
+                </div>
+              ))}
+            </div>
             <div className="flex justify-end gap-2 sm:col-span-2">
               <Button variant="outline" onClick={() => setIsFormOpen(false)}>
                 취소
