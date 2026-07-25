@@ -97,7 +97,7 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
           </Avatar>
         </div>
       </AppHeader>
-      <div className="flex min-h-[calc(100vh-4rem)]">
+      <div className="flex min-h-0 flex-1">
         {navigationContent()}
         <AppMain>
           <div className="mx-auto max-w-7xl">{children}</div>
