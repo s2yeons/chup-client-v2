@@ -20,7 +20,7 @@ function AppSidebar({ className, mobile = false, ...props }: AppSidebarProps) {
     <aside
       className={cn(
         mobile
-          ? 'flex h-full w-full flex-col'
+          ? 'flex min-h-0 w-full flex-1 flex-col overflow-y-auto'
           : 'bg-sidebar hidden h-full w-60 shrink-0 border-r md:flex md:flex-col',
         className,
       )}

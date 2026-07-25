@@ -91,10 +91,10 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
           onMouseDown={() => setIsMobileMenuOpen(false)}
         >
           <div
-            className="bg-sidebar h-full w-72 shadow-xl"
+            className="bg-sidebar flex h-full w-72 flex-col shadow-xl"
             onMouseDown={(event) => event.stopPropagation()}
           >
-            <div className="flex h-16 items-center justify-between px-5">
+            <div className="flex h-16 shrink-0 items-center justify-between px-5">
               <BrandLogo imageSrc={CLIENT_LOGO_URL} name="GSM Career" />
               <Button
                 variant="ghost"
