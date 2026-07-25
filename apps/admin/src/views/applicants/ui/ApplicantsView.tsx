@@ -70,10 +70,11 @@ const ApplicantsView = () => {
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[850px] text-sm">
+            <table className="w-full min-w-[1000px] text-sm">
               <thead className="bg-secondary/60 text-muted-foreground text-left">
                 <tr>
                   <th className="px-5 py-3 font-medium">지원자</th>
+                  <th className="px-5 py-3 font-medium">전화번호</th>
                   <th className="px-5 py-3 font-medium">지원 회사</th>
                   <th className="px-5 py-3 font-medium">포지션</th>
                   <th className="px-5 py-3 font-medium">지원 일시</th>
@@ -97,6 +98,7 @@ const ApplicantsView = () => {
                         </div>
                       </div>
                     </td>
+                    <td className="px-5 py-4">{application.phone}</td>
                     <td className="px-5 py-4 font-medium">{application.company}</td>
                     <td className="px-5 py-4">{application.position}</td>
                     <td className="text-muted-foreground px-5 py-4">
