@@ -12,9 +12,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  toast,
 } from '@chup/ui';
 import { Download, FileArchive } from 'lucide-react';
-import { toast } from 'sonner';
 
 import { StatusBadge } from '@/entities/application';
 import { ApplicantResultButtons } from '@/features/applicant-result';

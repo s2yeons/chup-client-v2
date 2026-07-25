@@ -3,9 +3,17 @@
 import { useState } from 'react';
 
 import { useRecruitment } from '@chup/core/entities';
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input } from '@chup/ui';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Input,
+  toast,
+} from '@chup/ui';
 import { Plus, Search, X } from 'lucide-react';
-import { toast } from 'sonner';
 
 import { StatusBadge } from '@/entities/application';
 import { JobStatusButton } from '@/features/job-status';

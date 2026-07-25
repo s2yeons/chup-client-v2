@@ -2,8 +2,7 @@
 
 import type { ApplicationStatusType, ApplicationType } from '@chup/core/entities';
 import { useRecruitment } from '@chup/core/entities';
-import { Button } from '@chup/ui';
-import { toast } from 'sonner';
+import { Button, toast } from '@chup/ui';
 
 interface ApplicantResultButtonsProps {
   application: ApplicationType;

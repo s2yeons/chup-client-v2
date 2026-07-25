@@ -5,9 +5,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { AppMain, AppShell, AppSidebar, BrandLogo, Button, cn } from '@chup/ui';
+import { AppMain, AppShell, AppSidebar, BrandLogo, Button, cn, toast } from '@chup/ui';
 import { LogOut, Menu, X } from 'lucide-react';
-import { toast } from 'sonner';
 
 import { ADMIN_LOGO_URL, adminNavigationItems } from '../model/navigation';
 

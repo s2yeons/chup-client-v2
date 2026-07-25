@@ -1,7 +1,6 @@
 'use client';
 
-import { cn } from '@chup/ui';
-import { toast } from 'sonner';
+import { cn, toast } from '@chup/ui';
 
 interface ProfileFileUploadInputProps {
   disabled: boolean;

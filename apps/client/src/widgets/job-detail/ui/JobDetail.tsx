@@ -3,9 +3,8 @@
 import { useState } from 'react';
 
 import type { JobType } from '@chup/core/entities';
-import { Badge, Button, Separator } from '@chup/ui';
+import { Badge, Button, Separator, toast } from '@chup/ui';
 import { Download, FileText, X } from 'lucide-react';
-import { toast } from 'sonner';
 
 import { ApplyButton } from '@/features/job-apply';
 

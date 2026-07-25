@@ -2,9 +2,8 @@
 
 import type { JobType } from '@chup/core/entities';
 import { useRecruitment } from '@chup/core/entities';
-import { Button } from '@chup/ui';
+import { Button, toast } from '@chup/ui';
 import { Send } from 'lucide-react';
-import { toast } from 'sonner';
 
 interface ApplyButtonProps {
   job: JobType;
