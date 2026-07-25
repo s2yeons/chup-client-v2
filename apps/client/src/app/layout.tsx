@@ -2,6 +2,8 @@ import localFont from 'next/font/local';
 
 import type { Metadata } from 'next';
 
+import { AppNavigation } from '@/widgets/app-navigation';
+
 import Providers from './providers';
 
 import '@chup/ui/styles.css';
@@ -27,7 +29,9 @@ const RootLayout = ({
   return (
     <html lang="ko" className={`font-sans ${pretendard.variable}`}>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <AppNavigation>{children}</AppNavigation>
+        </Providers>
       </body>
     </html>
   );

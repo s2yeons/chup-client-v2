@@ -24,6 +24,9 @@ dist/
 # turbo
 .turbo/
 
+# local worktrees
+.worktrees/
+
 # misc
 .DS_Store
 *.pem
