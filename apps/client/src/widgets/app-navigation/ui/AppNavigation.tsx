@@ -5,18 +5,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import {
-  AppHeader,
-  AppMain,
-  AppShell,
-  AppSidebar,
-  Avatar,
-  AvatarFallback,
-  BrandLogo,
-  Button,
-  cn,
-} from '@chup/ui';
-import { Bell, LogOut, Menu, X } from 'lucide-react';
+import { AppMain, AppShell, AppSidebar, BrandLogo, Button, cn } from '@chup/ui';
+import { LogOut, Menu, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { CLIENT_LOGO_URL, clientNavigationItems } from '../model/navigation';
@@ -33,6 +23,11 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
 
   const navigationContent = (mobile = false) => (
     <AppSidebar mobile={mobile}>
+      {!mobile && (
+        <div className="flex shrink-0 items-center px-5 pt-5">
+          <BrandLogo imageSrc={CLIENT_LOGO_URL} name="GSM Career" />
+        </div>
+      )}
       <div className="flex flex-1 flex-col gap-1 p-3">
         <p className="text-muted-foreground px-3 pt-3 pb-2 text-xs font-semibold tracking-wider uppercase">
           학생 메뉴
@@ -73,35 +68,19 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
 
   return (
     <AppShell>
-      <AppHeader>
-        <div className="flex items-center gap-3">
+      {navigationContent()}
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+        <header className="bg-background/95 z-20 flex h-16 shrink-0 items-center gap-3 border-b px-4 backdrop-blur md:hidden">
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
             onClick={() => setIsMobileMenuOpen(true)}
             aria-label="메뉴 열기"
           >
             <Menu />
           </Button>
           <BrandLogo imageSrc={CLIENT_LOGO_URL} name="GSM Career" />
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="알림"
-            onClick={() => toast.info('새 알림이 없습니다.')}
-          >
-            <Bell />
-          </Button>
-          <Avatar className="size-9">
-            <AvatarFallback className="bg-primary text-primary-foreground">김</AvatarFallback>
-          </Avatar>
-        </div>
-      </AppHeader>
-      <div className="flex min-h-0 flex-1">
-        {navigationContent()}
+        </header>
         <AppMain>
           <div className="mx-auto max-w-7xl">{children}</div>
         </AppMain>

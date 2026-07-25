@@ -5,19 +5,7 @@ import { cn } from '../lib/utils';
 function AppShell({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      className={cn('bg-background text-foreground flex h-dvh flex-col overflow-hidden', className)}
-      {...props}
-    />
-  );
-}
-
-function AppHeader({ className, ...props }: React.ComponentProps<'header'>) {
-  return (
-    <header
-      className={cn(
-        'bg-background/95 z-20 flex h-16 shrink-0 items-center justify-between border-b px-4 backdrop-blur md:px-6',
-        className,
-      )}
+      className={cn('bg-background text-foreground flex h-dvh overflow-hidden', className)}
       {...props}
     />
   );
@@ -50,4 +38,4 @@ function AppMain({ className, ...props }: React.ComponentProps<'main'>) {
   );
 }
 
-export { AppHeader, AppMain, AppShell, AppSidebar };
+export { AppMain, AppShell, AppSidebar };
