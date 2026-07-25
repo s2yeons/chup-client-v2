@@ -12,5 +12,8 @@ export const initialProfileFiles: ProfileFileType[] = [
 export const addProfileFile = (files: ProfileFileType[], file: ProfileFileType) =>
   files.length >= MAX_PROFILE_FILE_COUNT ? files : [...files, file];
 
+export const isProfileFileLimitReached = (files: ProfileFileType[]) =>
+  files.length >= MAX_PROFILE_FILE_COUNT;
+
 export const removeProfileFile = (files: ProfileFileType[], fileId: string) =>
   files.filter((file) => file.id !== fileId);
