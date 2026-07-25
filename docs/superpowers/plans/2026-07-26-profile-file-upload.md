@@ -93,7 +93,7 @@ Expected: PASS with one test.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add apps/client/src/views/profile/model/profileFiles.ts apps/client/src/views/profile/model/profileFiles.test.ts
+git add apps/client/src/views/profile/model/profileFiles.ts apps/client/src/views/profile/model/profileFiles.test.mjs
 git commit -m "add(profile): 첨부 파일 상태 모델 추가"
 ```
 
@@ -164,7 +164,7 @@ Add `export const isProfileFileLimitReached = (files: ProfileFileType[]) => file
 
 - [ ] **Step 4: Run test to verify it passes**
 
-Run: `node --test apps/client/src/views/profile/model/profileFiles.test.ts`
+Run: `node --test apps/client/src/views/profile/model/profileFiles.test.mjs`
 
 Expected: PASS with the 3-file limit and deletion behavior covered.
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@chup/ui';
 import { toast } from 'sonner';
 
 interface ProfileFileUploadInputProps {
@@ -22,7 +23,12 @@ const ProfileFileUploadInput = ({ disabled, onAdd }: ProfileFileUploadInputProps
   };
 
   return (
-    <label className="bg-background inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg border px-3 text-sm font-medium">
+    <label
+      className={cn(
+        'bg-background inline-flex h-9 items-center gap-2 rounded-lg border px-3 text-sm font-medium',
+        disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
+      )}
+    >
       <input
         disabled={disabled}
         type="file"

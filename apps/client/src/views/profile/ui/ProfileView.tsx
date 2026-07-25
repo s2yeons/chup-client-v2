@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chup/ui';
 import { FileText, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { ProfileFileUploadInput } from '@/features/profile-file-upload';
 import {
@@ -23,10 +24,12 @@ const ProfileView = () => {
     setFiles((currentFiles) =>
       addProfileFile(currentFiles, { id: crypto.randomUUID(), name: fileName }),
     );
+    toast.success('파일이 추가되었습니다.');
   };
 
   const handleRemove = (fileId: string) => {
     setFiles((currentFiles) => removeProfileFile(currentFiles, fileId));
+    toast.success('파일이 삭제되었습니다.');
   };
 
   return (
