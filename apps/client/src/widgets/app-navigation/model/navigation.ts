@@ -1,7 +1,6 @@
 import { BriefcaseBusiness, CircleUserRound, FileText, LayoutDashboard } from 'lucide-react';
 
-export const CLIENT_LOGO_URL =
-  'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-w9JVQ2aQjP6LOfTukzjQbigUxdICnx.png';
+export const CLIENT_LOGO_URL = '/chup-logo.png';
 
 export const clientNavigationItems = [
   { href: '/', label: '홈', icon: LayoutDashboard },
