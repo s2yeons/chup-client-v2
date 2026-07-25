@@ -119,9 +119,9 @@ Expected: 기존 공고 소비자는 첨부파일 유무와 관계없이 동일�
 
 - [ ] **Step 3: 공유 타입을 검증한다.**
 
-Run: `pnpm --filter @chup/core check-types && pnpm --filter admin check-types && pnpm --filter client check-types`
+Run: `pnpm --filter @chup/core check-types`
 
-Expected: `JobType` 객체를 생성하는 모든 위치가 `attachments`를 제공한다.
+Expected: 공유 `JobType`과 목업 데이터가 `attachments`를 제공한다. 기존 어드민 공고 생성 객체의 `attachments` 추가는 다음 Task 3에서 처리하고, 앱 전체 타입 검증은 Task 4에서 수행한다.
 
 - [ ] **Step 4: 커밋한다.**
 
