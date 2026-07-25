@@ -25,7 +25,7 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
     <AppSidebar mobile={mobile}>
       {!mobile && (
         <div className="flex h-16 shrink-0 items-center px-5">
-          <BrandLogo imageSrc={CLIENT_LOGO_URL} name="GSM Career" />
+          <BrandLogo imageSrc={CLIENT_LOGO_URL} name="CHUP" />
         </div>
       )}
       <div className="flex flex-1 flex-col gap-1 p-3 pt-0">
@@ -79,7 +79,7 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
           >
             <Menu />
           </Button>
-          <BrandLogo imageSrc={CLIENT_LOGO_URL} name="GSM Career" />
+          <BrandLogo imageSrc={CLIENT_LOGO_URL} name="CHUP" />
         </header>
         <AppMain>
           <div className="mx-auto max-w-7xl">{children}</div>
@@ -95,7 +95,7 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
             onMouseDown={(event) => event.stopPropagation()}
           >
             <div className="flex h-16 shrink-0 items-center justify-between px-5">
-              <BrandLogo imageSrc={CLIENT_LOGO_URL} name="GSM Career" />
+              <BrandLogo imageSrc={CLIENT_LOGO_URL} name="CHUP" />
               <Button
                 variant="ghost"
                 size="icon"
