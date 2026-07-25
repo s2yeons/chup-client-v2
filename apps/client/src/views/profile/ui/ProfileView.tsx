@@ -98,7 +98,9 @@ const ProfileView = () => {
                   id="phone-number"
                   type="tel"
                   value={phoneNumber}
-                  onChange={(event) => setPhoneNumber(event.target.value.replace(/\D/g, '').slice(0, 11))}
+                  onChange={(event) =>
+                    setPhoneNumber(event.target.value.replace(/\D/g, '').slice(0, 11))
+                  }
                   placeholder="전화번호를 입력해주세요"
                   inputMode="numeric"
                 />

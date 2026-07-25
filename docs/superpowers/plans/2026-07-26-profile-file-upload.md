@@ -50,10 +50,10 @@ test('프로필 파일은 최대 3개까지만 추가한다', () => {
 
   assert.equal(MAX_PROFILE_FILE_COUNT, 3);
   assert.equal(cappedFiles.length, 3);
-  assert.deepEqual(removeProfileFile(cappedFiles, 'portfolio').map((file) => file.name), [
-    '김도윤_2314_이력서.pdf',
-    '기타.pdf',
-  ]);
+  assert.deepEqual(
+    removeProfileFile(cappedFiles, 'portfolio').map((file) => file.name),
+    ['김도윤_2314_이력서.pdf', '기타.pdf'],
+  );
 });
 ```
 
@@ -153,7 +153,13 @@ const ProfileFileUploadInput = ({ disabled, onAdd }: ProfileFileUploadInputProps
 
   return (
     <label className="bg-background inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg border px-3 text-sm font-medium">
-      <input disabled={disabled} type="file" accept="application/pdf" className="sr-only" onChange={handleChange} />
+      <input
+        disabled={disabled}
+        type="file"
+        accept="application/pdf"
+        className="sr-only"
+        onChange={handleChange}
+      />
       파일 추가
     </label>
   );

@@ -34,6 +34,7 @@
 ## Task 1: 공통 날짜 선택 primitive 추가
 
 **Files:**
+
 - Modify: `packages/ui/package.json`
 - Create: `packages/ui/src/ui/calendar.tsx`
 - Create: `packages/ui/src/ui/popover.tsx`
@@ -93,6 +94,7 @@ git commit -m "add(ui): 날짜 선택 primitive 추가"
 ## Task 2: 공고 첨부파일 파일명 상태 추가
 
 **Files:**
+
 - Modify: `packages/core/src/entities/recruitment/model/types.ts`
 - Modify: `packages/core/src/entities/recruitment/model/mock-data.ts`
 
@@ -133,6 +135,7 @@ git commit -m "update(job): 공고 첨부파일 필드 추가"
 ## Task 3: 공고 등록 폼의 포지션·날짜·첨부파일 입력 추가
 
 **Files:**
+
 - Modify: `apps/admin/src/views/postings/ui/PostingsView.tsx`
 
 **Consumes:** `Calendar`, `Popover`, `PopoverContent`, `PopoverTrigger`, `Button`, `Input`, `toast`, `JobType.attachments`
@@ -231,6 +234,7 @@ git commit -m "update(posting): 공고 등록 입력 확장"
 ## Task 4: 지원자 목록 전화번호 컬럼 추가 및 전체 검증
 
 **Files:**
+
 - Modify: `apps/admin/src/views/applicants/ui/ApplicantsView.tsx`
 
 **Consumes:** `ApplicationType.phone`
