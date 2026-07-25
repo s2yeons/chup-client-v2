@@ -41,7 +41,6 @@ const ApplicantsView = () => {
           </p>
         </div>
         <Button
-          variant="outline"
           onClick={() =>
             toast.success(
               `${company === '전체' ? '전체 회사' : company} 지원 서류 ZIP을 준비했습니다.`,
