@@ -77,7 +77,13 @@ const PostingsView = () => {
   };
 
   const createPosting = () => {
-    if (!company.trim() || !employment || !description.trim() || positions.length === 0 || !deadline) {
+    if (
+      !company.trim() ||
+      !employment ||
+      !description.trim() ||
+      positions.length === 0 ||
+      !deadline
+    ) {
       toast.error('회사명, 고용 형태, 회사 소개, 모집 포지션, 마감일을 입력해주세요.');
       return;
     }
@@ -154,7 +160,7 @@ const PostingsView = () => {
               <SelectTrigger>
                 <SelectValue placeholder="고용 형태" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent side="bottom" align="start" alignItemWithTrigger={false}>
                 {EMPLOYMENT_OPTIONS.map((option) => (
                   <SelectItem key={option} value={option}>
                     {option}
@@ -166,7 +172,7 @@ const PostingsView = () => {
               value={description}
               onChange={(event) => setDescription(event.target.value)}
               placeholder="회사 소개"
-              className="border-input focus-visible:border-ring focus-visible:ring-ring/50 min-h-28 rounded-lg border bg-transparent px-3 py-2 text-sm outline-none focus-visible:ring-3 sm:col-span-2"
+              className="border-input focus-visible:border-ring focus-visible:ring-ring/50 [field-sizing:content] min-h-28 resize-none rounded-lg border bg-transparent px-3 py-2 text-sm outline-none focus-visible:ring-3 sm:col-span-2"
             />
             <div className="flex flex-wrap gap-2">
               {POSITION_OPTIONS.map((position) => (
@@ -257,7 +263,7 @@ const PostingsView = () => {
           </CardContent>
         </Card>
       )}
-      <Card>
+      <Card className="p-0">
         <CardContent className="p-0">
           <div className="flex items-center gap-3 border-b p-4">
             <Search className="text-muted-foreground size-4" />
