@@ -63,7 +63,7 @@ const ApplicantsView = () => {
           </Button>
         ))}
       </div>
-      <Card>
+      <Card className="pb-1">
         <CardHeader>
           <CardTitle>{company === '전체' ? '전체 지원자' : `${company} 지원자`}</CardTitle>
           <CardDescription>총 {filteredApplications.length}명의 지원자가 있습니다.</CardDescription>

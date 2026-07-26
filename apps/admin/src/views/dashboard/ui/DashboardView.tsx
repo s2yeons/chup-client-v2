@@ -41,7 +41,7 @@ const DashboardView = () => {
           icon={UsersRound}
         />
       </div>
-      <Card>
+      <Card className="pb-2">
         <CardHeader>
           <CardTitle>최근 공고</CardTitle>
           <CardDescription>마감일과 지원 현황을 확인하세요.</CardDescription>

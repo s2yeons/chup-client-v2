@@ -11,7 +11,7 @@ interface StatCardProps {
 
 function StatCard({ label, value, note, icon: Icon }: StatCardProps) {
   return (
-    <Card>
+    <Card className="p-0">
       <CardContent className="flex items-start justify-between p-5">
         <div>
           <p className="text-muted-foreground text-sm">{label}</p>
