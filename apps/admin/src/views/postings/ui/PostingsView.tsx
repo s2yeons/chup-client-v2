@@ -15,6 +15,11 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   toast,
 } from '@chup/ui';
 import { CalendarDays, Plus, Search, X } from 'lucide-react';
@@ -23,11 +28,14 @@ import { StatusBadge } from '@/entities/application';
 import { JobStatusButton } from '@/features/job-status';
 
 const POSITION_OPTIONS = ['프론트엔드', '백엔드', 'DevOps', 'AI', '클라우드'];
+const EMPLOYMENT_OPTIONS = ['정규직', '산업기능요원', '인턴', '계약직'];
 
 const PostingsView = () => {
   const { jobs, setJobs } = useRecruitment();
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [company, setCompany] = useState<string>('');
+  const [employment, setEmployment] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
   const [positions, setPositions] = useState<string[]>([]);
   const [customPosition, setCustomPosition] = useState<string>('');
   const [deadline, setDeadline] = useState<Date | undefined>();
@@ -69,8 +77,8 @@ const PostingsView = () => {
   };
 
   const createPosting = () => {
-    if (!company.trim() || positions.length === 0 || !deadline) {
-      toast.error('회사명, 모집 포지션, 마감일을 입력해주세요.');
+    if (!company.trim() || !employment || !description.trim() || positions.length === 0 || !deadline) {
+      toast.error('회사명, 고용 형태, 회사 소개, 모집 포지션, 마감일을 입력해주세요.');
       return;
     }
 
@@ -83,9 +91,9 @@ const PostingsView = () => {
       {
         id: Date.now(),
         company: company.trim(),
-        description: '새롭게 등록된 채용 공고입니다.',
+        description: description.trim(),
         positions,
-        employment: '정규직',
+        employment,
         deadline: formatDeadline(deadline),
         dday: Math.ceil((selectedDeadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)),
         applicants: 0,
@@ -95,6 +103,8 @@ const PostingsView = () => {
       ...currentJobs,
     ]);
     setCompany('');
+    setEmployment('');
+    setDescription('');
     setPositions([]);
     setCustomPosition('');
     setDeadline(undefined);
@@ -139,6 +149,24 @@ const PostingsView = () => {
               value={company}
               onChange={(event) => setCompany(event.target.value)}
               placeholder="회사명"
+            />
+            <Select value={employment} onValueChange={(value) => setEmployment(value ?? '')}>
+              <SelectTrigger>
+                <SelectValue placeholder="고용 형태" />
+              </SelectTrigger>
+              <SelectContent>
+                {EMPLOYMENT_OPTIONS.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <textarea
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              placeholder="회사 소개"
+              className="border-input focus-visible:border-ring focus-visible:ring-ring/50 min-h-28 rounded-lg border bg-transparent px-3 py-2 text-sm outline-none focus-visible:ring-3 sm:col-span-2"
             />
             <div className="flex flex-wrap gap-2">
               {POSITION_OPTIONS.map((position) => (
