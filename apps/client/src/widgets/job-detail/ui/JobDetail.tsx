@@ -74,23 +74,27 @@ const JobDetail = ({ job, onClose }: JobDetailProps) => {
             ))}
           </div>
         </section>
-        <section className="mt-8">
-          <h3 className="font-bold">첨부파일</h3>
-          <Button
-            variant="outline"
-            className="mt-3 h-auto w-full justify-between p-4 text-left"
-            onClick={() => toast.success('채용공고.pdf 다운로드를 시작합니다.')}
-          >
-            <span className="flex items-center gap-3">
-              <FileText className="text-primary size-5" />
-              <span>
-                <strong className="block text-sm">{job.company}_채용공고.pdf</strong>
-                <span className="text-muted-foreground text-xs">PDF · 2.4 MB</span>
-              </span>
-            </span>
-            <Download className="size-4" />
-          </Button>
-        </section>
+        {job.attachments.length > 0 && (
+          <section className="mt-8">
+            <h3 className="font-bold">첨부파일</h3>
+            <div className="mt-3 space-y-2">
+              {job.attachments.map((attachment) => (
+                <Button
+                  key={attachment}
+                  variant="outline"
+                  className="h-auto w-full justify-between p-4 text-left"
+                  onClick={() => toast.success(`${attachment} 다운로드를 시작합니다.`)}
+                >
+                  <span className="flex items-center gap-3">
+                    <FileText className="text-primary size-5" />
+                    <strong className="text-sm">{attachment}</strong>
+                  </span>
+                  <Download className="size-4" />
+                </Button>
+              ))}
+            </div>
+          </section>
+        )}
         <div className="bg-secondary mt-10 rounded-2xl p-4">
           <div className="flex items-center gap-3">
             <FileText className="text-primary size-5" />
