@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { AppMain, AppShell, AppSidebar, BrandLogo, Button, cn, toast } from '@chup/ui';
+import { AppMain, AppShell, AppSidebar, BrandLogo, Button, cn, ThemeToggle, toast } from '@chup/ui';
 import { LogOut, Menu, X } from 'lucide-react';
 
 import { CLIENT_LOGO_URL, clientNavigationItems } from '../model/navigation';
@@ -53,9 +53,13 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
           <p className="text-sm font-semibold">김도윤</p>
           <p className="text-muted-foreground text-xs">2314 · 학생</p>
         </div>
+        <div className="mt-2 flex items-center justify-between px-1">
+          <span className="text-muted-foreground text-sm">테마</span>
+          <ThemeToggle />
+        </div>
         <Button
           variant="ghost"
-          className="text-muted-foreground mt-2 w-full justify-start"
+          className="text-muted-foreground w-full justify-start"
           onClick={() => toast.info('로그아웃 기능은 준비 중입니다.')}
         >
           <LogOut />
