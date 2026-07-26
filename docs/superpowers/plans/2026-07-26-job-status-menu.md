@@ -24,6 +24,7 @@
 ## Task 1: 명시적 공고 상태 변경 메뉴 추가
 
 **Files:**
+
 - Modify: `apps/admin/src/features/job-status/ui/JobStatusButton.tsx`
 
 **Consumes:** `JobType.status`, `useRecruitment().setJobs`, `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `toast`
@@ -49,7 +50,9 @@ const handleStatusChange = (status: JobType['status']) => {
     <MoreHorizontal />
   </DropdownMenuTrigger>
   <DropdownMenuContent align="end">
-    <DropdownMenuItem onClick={() => handleStatusChange(job.status === '모집중' ? '마감' : '모집중')}>
+    <DropdownMenuItem
+      onClick={() => handleStatusChange(job.status === '모집중' ? '마감' : '모집중')}
+    >
       {job.status === '모집중' ? '공고 마감' : '모집 재개'}
     </DropdownMenuItem>
   </DropdownMenuContent>

@@ -27,6 +27,7 @@
 ## Task 1: 공고 등록 폼에 고용 형태와 회사 소개 입력 추가
 
 **Files:**
+
 - Modify: `apps/admin/src/views/postings/ui/PostingsView.tsx`
 
 **Consumes:** `JobType.employment`, `JobType.description`, 기존 `Button`, `Input`, `Select`, `toast`
@@ -86,6 +87,7 @@ git commit -m "update(posting): 상세 정보 입력 추가"
 ## Task 2: 학생 공고 상세에 실제 첨부파일명 표시
 
 **Files:**
+
 - Modify: `apps/client/src/widgets/job-detail/ui/JobDetail.tsx`
 
 **Consumes:** `JobType.attachments: string[]`, 기존 `FileText`, `Download`, `toast`
@@ -95,27 +97,29 @@ git commit -m "update(posting): 상세 정보 입력 추가"
 - [ ] **Step 1: 하드코딩된 첨부파일 버튼을 조건부 파일명 목록으로 교체한다.**
 
 ```tsx
-{job.attachments.length > 0 && (
-  <section className="mt-8">
-    <h3 className="font-bold">첨부파일</h3>
-    <div className="mt-3 space-y-2">
-      {job.attachments.map((attachment) => (
-        <Button
-          key={attachment}
-          variant="outline"
-          className="h-auto w-full justify-between p-4 text-left"
-          onClick={() => toast.success(`${attachment} 다운로드를 시작합니다.`)}
-        >
-          <span className="flex items-center gap-3">
-            <FileText className="text-primary size-5" />
-            <strong className="text-sm">{attachment}</strong>
-          </span>
-          <Download className="size-4" />
-        </Button>
-      ))}
-    </div>
-  </section>
-)}
+{
+  job.attachments.length > 0 && (
+    <section className="mt-8">
+      <h3 className="font-bold">첨부파일</h3>
+      <div className="mt-3 space-y-2">
+        {job.attachments.map((attachment) => (
+          <Button
+            key={attachment}
+            variant="outline"
+            className="h-auto w-full justify-between p-4 text-left"
+            onClick={() => toast.success(`${attachment} 다운로드를 시작합니다.`)}
+          >
+            <span className="flex items-center gap-3">
+              <FileText className="text-primary size-5" />
+              <strong className="text-sm">{attachment}</strong>
+            </span>
+            <Download className="size-4" />
+          </Button>
+        ))}
+      </div>
+    </section>
+  );
+}
 ```
 
 - [ ] **Step 2: 수동 동작을 확인한다.**
