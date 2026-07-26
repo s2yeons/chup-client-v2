@@ -4,9 +4,10 @@ export const initialJobs: JobType[] = [
   {
     id: 1,
     company: '카카오',
-    description: '더 나은 세상을 만드는 기술과 사람을 연결합니다.',
+    description:
+      '더 나은 세상을 만드는 기술과 사람을 연결합니다. 학생 여러분의 가능성과 성장을 중요하게 생각하며, 함께 새로운 서비스를 만들어갈 동료를 기다리고 있습니다.',
     positions: ['프론트엔드', '백엔드'],
-    attachments: [],
+    attachments: ['카카오_채용공고.pdf'],
     employment: '정규직',
     deadline: '2026.07.28',
     dday: 8,

@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 어드민이 고용 형태와 회사 소개를 입력하고, 학생이 공고 상세에서 등록 첨부파일명을 확인하게 한다.
+**Goal:** 어드민이 고용 형태와 회사 소개를 입력하고, 학생이 목 공고 상세에서 첨부파일명을 확인하게 한다.
 
-**Architecture:** 공고 등록 상태는 단일 소비처인 `PostingsView`에 유지하고 기존 `JobType.employment`, `JobType.description`, `JobType.attachments`에 저장한다. 학생 상세 화면은 새 모델을 만들지 않고 이 세 필드를 그대로 표시한다.
+**Architecture:** 어드민 공고 등록 상태는 단일 소비처인 `PostingsView`에 유지하고 기존 `JobType.employment`, `JobType.description`, `JobType.attachments`에 저장한다. 학생 상세 화면은 학생 앱 Local Provider의 목 `JobType` 필드를 그대로 표시한다. 두 앱의 상태는 API 도입 전까지 독립적이며, 등록 결과를 학생 앱에 공유하지 않는다.
 
 **Tech Stack:** Next.js 16, React 19, TypeScript, Tailwind CSS 4, `@base-ui/react`, `@chup/ui`
 
@@ -13,7 +13,7 @@
 - 고용 형태는 `정규직`, `산업기능요원`, `인턴`, `계약직` 중 하나를 선택한다.
 - 회사명·고용 형태·회사 소개·포지션 1개 이상·마감일은 필수이며 오류는 `@chup/ui` `toast`로 알린다.
 - 첨부파일은 기존 `JobType.attachments` 파일명 배열만 사용하며 실제 업로드·다운로드 API는 추가하지 않는다.
-- 첨부파일이 없으면 학생 공고 상세의 첨부파일 영역을 렌더링하지 않는다.
+- 첨부파일이 없으면 학생 공고 상세의 첨부파일 영역을 렌더링하지 않는다. 학생 목 데이터에는 상세 확인용 카카오 첨부파일을 둔다.
 - 회사 로고 업로드와 별도 공고 제목 입력은 추가하지 않는다.
 - 자동화 테스트 파일은 추가하지 않고, 수동 UI 검증과 `pnpm build`, `pnpm lint`, `pnpm lint:fsd`, `pnpm check-types`만 수행한다.
 
@@ -90,7 +90,7 @@ git commit -m "update(posting): 상세 정보 입력 추가"
 
 **Consumes:** `JobType.attachments: string[]`, 기존 `FileText`, `Download`, `toast`
 
-**Produces:** 첨부파일이 있는 공고에서만 보이는 파일명 목록
+**Produces:** 첨부파일이 있는 학생 목 공고에서만 보이는 파일명 목록
 
 - [ ] **Step 1: 하드코딩된 첨부파일 버튼을 조건부 파일명 목록으로 교체한다.**
 
@@ -120,7 +120,7 @@ git commit -m "update(posting): 상세 정보 입력 추가"
 
 - [ ] **Step 2: 수동 동작을 확인한다.**
 
-1. 첨부파일이 있는 새 공고 상세에서 등록한 파일명이 모두 보이는지 확인한다.
+1. 첨부파일이 있는 학생 목 공고 상세에서 파일명이 모두 보이는지 확인한다.
 2. 첨부파일이 없는 기존 공고 상세에 `첨부파일` 섹션이 없는지 확인한다.
 3. 파일 버튼을 누르면 해당 파일명으로 다운로드 토스트가 보이는지 확인한다.
 

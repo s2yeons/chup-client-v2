@@ -54,10 +54,7 @@ const JobDetail = ({ job, onClose }: JobDetailProps) => {
         </div>
         <section className="mt-8">
           <h3 className="font-bold">회사 소개</h3>
-          <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
-            {job.description} 학생 여러분의 가능성과 성장을 중요하게 생각하며, 함께 새로운 서비스를
-            만들어갈 동료를 기다리고 있습니다.
-          </p>
+          <p className="text-muted-foreground mt-3 text-sm leading-relaxed">{job.description}</p>
         </section>
         <section className="mt-8">
           <h3 className="font-bold">모집 포지션</h3>
@@ -78,9 +75,9 @@ const JobDetail = ({ job, onClose }: JobDetailProps) => {
           <section className="mt-8">
             <h3 className="font-bold">첨부파일</h3>
             <div className="mt-3 space-y-2">
-              {job.attachments.map((attachment) => (
+              {job.attachments.map((attachment, index) => (
                 <Button
-                  key={attachment}
+                  key={`${attachment}-${index}`}
                   variant="outline"
                   className="h-auto w-full justify-between p-4 text-left"
                   onClick={() => toast.success(`${attachment} 다운로드를 시작합니다.`)}
