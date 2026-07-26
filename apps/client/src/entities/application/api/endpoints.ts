@@ -1,4 +1,4 @@
 export const applicationUrl = {
-  getApplications: () => '/applications',
-  postApplication: (jobId: number) => `/jobs/${jobId}/applications`,
+  getApplications: () => '/api/applications',
+  postApplication: (jobId: number) => `/api/jobs/${jobId}/applications`,
 } as const;
