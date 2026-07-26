@@ -3,9 +3,8 @@
 import { useState } from 'react';
 
 import type { JobType } from '@chup/core/entities';
-import { Badge, Button, Separator } from '@chup/ui';
+import { Badge, Button, Separator, toast } from '@chup/ui';
 import { Download, FileText, X } from 'lucide-react';
-import { toast } from 'sonner';
 
 import { ApplyButton } from '@/features/job-apply';
 
@@ -20,7 +19,7 @@ const JobDetail = ({ job, onClose }: JobDetailProps) => {
   return (
     <div className="bg-foreground/20 fixed inset-0 z-50 flex justify-end" onMouseDown={onClose}>
       <div
-        className="bg-background h-full w-full max-w-xl overflow-y-auto p-6 shadow-2xl"
+        className="bg-sidebar h-full w-full max-w-xl overflow-y-auto p-6 shadow-2xl"
         onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="flex items-center justify-between">
@@ -55,10 +54,7 @@ const JobDetail = ({ job, onClose }: JobDetailProps) => {
         </div>
         <section className="mt-8">
           <h3 className="font-bold">회사 소개</h3>
-          <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
-            {job.description} 학생 여러분의 가능성과 성장을 중요하게 생각하며, 함께 새로운 서비스를
-            만들어갈 동료를 기다리고 있습니다.
-          </p>
+          <p className="text-muted-foreground mt-3 text-sm leading-relaxed">{job.description}</p>
         </section>
         <section className="mt-8">
           <h3 className="font-bold">모집 포지션</h3>
@@ -75,23 +71,27 @@ const JobDetail = ({ job, onClose }: JobDetailProps) => {
             ))}
           </div>
         </section>
-        <section className="mt-8">
-          <h3 className="font-bold">첨부파일</h3>
-          <Button
-            variant="outline"
-            className="mt-3 h-auto w-full justify-between p-4 text-left"
-            onClick={() => toast.success('채용공고.pdf 다운로드를 시작합니다.')}
-          >
-            <span className="flex items-center gap-3">
-              <FileText className="text-primary size-5" />
-              <span>
-                <strong className="block text-sm">{job.company}_채용공고.pdf</strong>
-                <span className="text-muted-foreground text-xs">PDF · 2.4 MB</span>
-              </span>
-            </span>
-            <Download className="size-4" />
-          </Button>
-        </section>
+        {job.attachments.length > 0 && (
+          <section className="mt-8">
+            <h3 className="font-bold">첨부파일</h3>
+            <div className="mt-3 space-y-2">
+              {job.attachments.map((attachment, index) => (
+                <Button
+                  key={`${attachment}-${index}`}
+                  variant="outline"
+                  className="h-auto w-full justify-between p-4 text-left"
+                  onClick={() => toast.success(`${attachment} 다운로드를 시작합니다.`)}
+                >
+                  <span className="flex items-center gap-3">
+                    <FileText className="text-primary size-5" />
+                    <strong className="text-sm">{attachment}</strong>
+                  </span>
+                  <Download className="size-4" />
+                </Button>
+              ))}
+            </div>
+          </section>
+        )}
         <div className="bg-secondary mt-10 rounded-2xl p-4">
           <div className="flex items-center gap-3">
             <FileText className="text-primary size-5" />

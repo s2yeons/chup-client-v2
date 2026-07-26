@@ -12,9 +12,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  toast,
 } from '@chup/ui';
 import { Download, FileArchive } from 'lucide-react';
-import { toast } from 'sonner';
 
 import { StatusBadge } from '@/entities/application';
 import { ApplicantResultButtons } from '@/features/applicant-result';
@@ -41,7 +41,6 @@ const ApplicantsView = () => {
           </p>
         </div>
         <Button
-          variant="outline"
           onClick={() =>
             toast.success(
               `${company === '전체' ? '전체 회사' : company} 지원 서류 ZIP을 준비했습니다.`,
@@ -64,17 +63,18 @@ const ApplicantsView = () => {
           </Button>
         ))}
       </div>
-      <Card>
+      <Card className="pb-1">
         <CardHeader>
           <CardTitle>{company === '전체' ? '전체 지원자' : `${company} 지원자`}</CardTitle>
           <CardDescription>총 {filteredApplications.length}명의 지원자가 있습니다.</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[850px] text-sm">
+            <table className="w-full min-w-[1000px] text-sm">
               <thead className="bg-secondary/60 text-muted-foreground text-left">
                 <tr>
                   <th className="px-5 py-3 font-medium">지원자</th>
+                  <th className="px-5 py-3 font-medium">전화번호</th>
                   <th className="px-5 py-3 font-medium">지원 회사</th>
                   <th className="px-5 py-3 font-medium">포지션</th>
                   <th className="px-5 py-3 font-medium">지원 일시</th>
@@ -98,6 +98,7 @@ const ApplicantsView = () => {
                         </div>
                       </div>
                     </td>
+                    <td className="px-5 py-4">{application.phone}</td>
                     <td className="px-5 py-4 font-medium">{application.company}</td>
                     <td className="px-5 py-4">{application.position}</td>
                     <td className="text-muted-foreground px-5 py-4">

@@ -2,16 +2,71 @@
 
 import { useState } from 'react';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chup/ui';
-import { FileText } from 'lucide-react';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Input,
+  toast,
+} from '@chup/ui';
+import { FileText, Trash2 } from 'lucide-react';
 
-import { ResumeReplaceInput } from '@/features/resume-replace';
+import { ProfileFileUploadInput } from '@/features/profile-file-upload';
+import {
+  addProfileFile,
+  initialProfileFiles,
+  isProfileFileLimitReached,
+  type ProfileFileType,
+  removeProfileFile,
+} from '@/views/profile/model/profileFiles';
+
+const formatPhoneNumber = (phoneNumber: string) => {
+  const digits = phoneNumber.replace(/\D/g, '');
+
+  if (!/^010\d{7,8}$/.test(digits)) return null;
+
+  return digits.length === 11
+    ? `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`
+    : `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+};
 
 const ProfileView = () => {
-  const [fileName, setFileName] = useState<string>('김도윤_2314_이력서.pdf');
+  const [files, setFiles] = useState<ProfileFileType[]>(initialProfileFiles);
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [savedPhoneNumber, setSavedPhoneNumber] = useState<string>('');
+
+  const isLimitReached = isProfileFileLimitReached(files);
+
+  const handleAdd = (fileName: string) => {
+    setFiles((currentFiles) =>
+      addProfileFile(currentFiles, { id: crypto.randomUUID(), name: fileName }),
+    );
+    toast.success('파일이 추가되었습니다.');
+  };
+
+  const handleRemove = (fileId: string) => {
+    setFiles((currentFiles) => removeProfileFile(currentFiles, fileId));
+    toast.success('파일이 삭제되었습니다.');
+  };
+
+  const handlePhoneSave = () => {
+    const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+
+    if (!formattedPhoneNumber) {
+      toast.error('010으로 시작하는 휴대폰 번호를 입력해주세요.');
+      return;
+    }
+
+    setPhoneNumber(formattedPhoneNumber);
+    setSavedPhoneNumber(formattedPhoneNumber);
+    toast.success('전화번호가 저장되었습니다.');
+  };
 
   return (
-    <div className="flex max-w-3xl flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <div>
         <p className="text-primary text-sm font-semibold">내 정보</p>
         <h1 className="mt-1 text-3xl font-bold">프로필과 이력서 관리</h1>
@@ -20,39 +75,79 @@ const ProfileView = () => {
       <Card>
         <CardHeader>
           <CardTitle>기본 정보</CardTitle>
-          <CardDescription>DataGSM 계정에서 연동된 정보입니다.</CardDescription>
+          <CardDescription>이름, 학번, 이메일은 DataGSM 계정에서 연동됩니다.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-5 sm:grid-cols-2">
           {[
             ['이름', '김도윤'],
             ['학번', '2314'],
             ['이메일', 'doyun@gsm.hs.kr'],
-            ['전화번호', '010-2381-7721'],
           ].map(([label, value]) => (
             <div key={label}>
               <p className="text-muted-foreground text-sm">{label}</p>
               <p className="mt-1 font-medium">{value}</p>
             </div>
           ))}
+          <div>
+            <label htmlFor="phone-number" className="text-muted-foreground text-sm">
+              전화번호
+            </label>
+            <div className="mt-1 flex gap-2">
+              <div className="min-w-0 flex-1">
+                <Input
+                  id="phone-number"
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={(event) =>
+                    setPhoneNumber(event.target.value.replace(/\D/g, '').slice(0, 11))
+                  }
+                  placeholder="전화번호를 입력해주세요"
+                  inputMode="numeric"
+                />
+              </div>
+              <Button
+                type="button"
+                disabled={!phoneNumber.trim() || phoneNumber === savedPhoneNumber}
+                onClick={handlePhoneSave}
+              >
+                저장
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>이력서</CardTitle>
-          <CardDescription>PDF 파일 한 개만 등록할 수 있습니다.</CardDescription>
+          <CardTitle>첨부 파일</CardTitle>
+          <CardDescription>PDF 파일을 최대 3개까지 등록할 수 있습니다.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-4 rounded-2xl border border-dashed p-5 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-3">
-              <div className="bg-primary/10 text-primary rounded-xl p-3">
-                <FileText className="size-6" />
+        <CardContent className="flex flex-col gap-4">
+          {files.map((file) => (
+            <div
+              key={file.id}
+              className="flex items-center justify-between gap-4 rounded-2xl border border-dashed p-5"
+            >
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="bg-primary/10 text-primary shrink-0 rounded-xl p-3">
+                  <FileText className="size-6" />
+                </div>
+                <p className="truncate font-semibold">{file.name}</p>
               </div>
-              <div>
-                <p className="font-semibold">{fileName}</p>
-                <p className="text-muted-foreground text-sm">PDF · 1.2 MB · 2026.07.15 수정</p>
-              </div>
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={() => handleRemove(file.id)}
+                aria-label={`${file.name} 삭제`}
+              >
+                <Trash2 />
+              </Button>
             </div>
-            <ResumeReplaceInput onChange={setFileName} />
+          ))}
+          <div className="flex flex-wrap items-center gap-3">
+            <ProfileFileUploadInput disabled={isLimitReached} onAdd={handleAdd} />
+            {isLimitReached && (
+              <p className="text-muted-foreground text-sm">최대 3개까지 등록할 수 있습니다.</p>
+            )}
           </div>
         </CardContent>
       </Card>

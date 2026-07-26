@@ -7,6 +7,7 @@ export interface JobType {
   company: string;
   description: string;
   positions: string[];
+  attachments: string[];
   employment: string;
   deadline: string;
   dday: number;

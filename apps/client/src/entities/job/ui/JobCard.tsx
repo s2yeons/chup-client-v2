@@ -10,7 +10,7 @@ interface JobCardProps {
 const JobCard = ({ job, onOpen }: JobCardProps) => {
   return (
     <Card
-      className="group border-border/80 hover:border-primary/30 cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-md"
+      className="group border-border/80 hover:border-primary/30 cursor-pointer justify-between transition-all hover:-translate-y-0.5 hover:shadow-md"
       onClick={() => onOpen(job)}
     >
       <CardHeader className="pb-3">

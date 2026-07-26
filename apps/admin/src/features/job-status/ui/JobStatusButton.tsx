@@ -2,9 +2,15 @@
 
 import type { JobType } from '@chup/core/entities';
 import { useRecruitment } from '@chup/core/entities';
-import { Button } from '@chup/ui';
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  toast,
+} from '@chup/ui';
 import { MoreHorizontal } from 'lucide-react';
-import { toast } from 'sonner';
 
 interface JobStatusButtonProps {
   job: JobType;
@@ -12,20 +18,28 @@ interface JobStatusButtonProps {
 
 const JobStatusButton = ({ job }: JobStatusButtonProps) => {
   const { setJobs } = useRecruitment();
-  const handleClick = () => {
+  const handleStatusChange = (status: JobType['status']) => {
     setJobs((jobs) =>
-      jobs.map((currentJob) =>
-        currentJob.id === job.id
-          ? { ...currentJob, status: currentJob.status === '모집중' ? '마감' : '모집중' }
-          : currentJob,
-      ),
+      jobs.map((currentJob) => (currentJob.id === job.id ? { ...currentJob, status } : currentJob)),
     );
-    toast.success('공고 상태가 변경되었습니다.');
+    toast.success(status === '마감' ? '공고를 마감했습니다.' : '모집을 재개했습니다.');
   };
+
   return (
-    <Button variant="ghost" size="icon" onClick={handleClick} aria-label="상태 변경">
-      <MoreHorizontal />
-    </Button>
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={<Button variant="ghost" size="icon" aria-label="공고 상태 메뉴" />}
+      >
+        <MoreHorizontal />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem
+          onClick={() => handleStatusChange(job.status === '모집중' ? '마감' : '모집중')}
+        >
+          {job.status === '모집중' ? '공고 마감' : '모집 재개'}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
