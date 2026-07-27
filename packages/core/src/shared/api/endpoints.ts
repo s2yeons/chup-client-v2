@@ -1,3 +1,4 @@
 export const authUrl = {
-  putRefresh: () => '/v2/auth/refresh',
+  getDatagsmLogin: () => '/api/auth/datagsm/login',
+  postLogout: () => '/api/auth/logout',
 } as const;
