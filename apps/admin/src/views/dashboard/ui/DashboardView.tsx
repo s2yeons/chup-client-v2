@@ -4,11 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, StatCard } f
 import { BriefcaseBusiness, CircleAlert, Clock3, Inbox, Loader2, UsersRound } from 'lucide-react';
 
 import { StatusBadge } from '@/entities/application';
-import {
-  employmentTypeMeta,
-  useGetAdminDashboard,
-  useGetAdminJobs,
-} from '@/entities/dashboard';
+import { employmentTypeMeta, useGetAdminDashboard, useGetAdminJobs } from '@/entities/dashboard';
 import { useGetMe } from '@/entities/user';
 
 const DashboardView = () => {

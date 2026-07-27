@@ -1,8 +1,5 @@
 export type EmploymentType =
-  | 'FULL_TIME'
-  | 'CONTRACT'
-  | 'INTERN'
-  | 'INDUSTRIAL_FUNCTIONAL_PERSONNEL';
+  'FULL_TIME' | 'CONTRACT' | 'INTERN' | 'INDUSTRIAL_FUNCTIONAL_PERSONNEL';
 
 export type JobStatusType = 'RECRUITING' | 'CLOSED';
 
