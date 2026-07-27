@@ -14,3 +14,8 @@ export interface ApplicationType {
   appliedAt: string;
   resultUpdatedAt: string | null;
 }
+
+export interface PostApplicationReqType {
+  jobId: number;
+  jobPositionId: number;
+}
