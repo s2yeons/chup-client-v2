@@ -2,7 +2,7 @@ import type { ApplicationStatusType, JobStatusType } from '@chup/core/entities';
 import { Badge } from '@chup/ui';
 
 interface StatusBadgeProps {
-  status: ApplicationStatusType | JobStatusType;
+  status: ApplicationStatusType | JobStatusType | 'RECRUITING' | 'CLOSED';
 }
 
 const StatusBadge = ({ status }: StatusBadgeProps) => {
@@ -14,8 +14,12 @@ const StatusBadge = ({ status }: StatusBadgeProps) => {
         서류 불합격
       </Badge>
     );
-  if (status === '마감') return <Badge variant="secondary">마감</Badge>;
-  return <Badge className="bg-primary/10 text-primary hover:bg-primary/10">{status}</Badge>;
+  if (status === '마감' || status === 'CLOSED') return <Badge variant="secondary">마감</Badge>;
+  return (
+    <Badge className="bg-primary/10 text-primary hover:bg-primary/10">
+      {status === 'RECRUITING' ? '모집중' : status}
+    </Badge>
+  );
 };
 
 export default StatusBadge;
