@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { RecruitmentProvider } from '@chup/core/entities';
-import { Toaster } from '@chup/ui';
+import { ThemeProvider, Toaster } from '@chup/ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
@@ -27,11 +27,13 @@ const Providers = ({ children }: ProvidersProps) => {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <RecruitmentProvider>{children}</RecruitmentProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-      <Toaster position="top-center" richColors />
-    </QueryClientProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <QueryClientProvider client={queryClient}>
+        <RecruitmentProvider>{children}</RecruitmentProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <Toaster position="top-center" richColors />
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 };
 

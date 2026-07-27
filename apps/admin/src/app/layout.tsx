@@ -27,7 +27,7 @@ const RootLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <html lang="ko" className={`font-sans ${pretendard.variable}`}>
+    <html lang="ko" className={`font-sans ${pretendard.variable}`} suppressHydrationWarning>
       <body>
         <Providers>
           <AppNavigation>{children}</AppNavigation>
