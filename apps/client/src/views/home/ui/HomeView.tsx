@@ -1,27 +1,38 @@
 'use client';
 
-import { useState } from 'react';
+import {
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  StatCard,
+} from '@chup/ui';
+import {
+  BriefcaseBusiness,
+  ChevronRight,
+  CircleAlert,
+  Inbox,
+  Loader2,
+  Send,
+  Sparkles,
+  UserRoundCheck,
+} from 'lucide-react';
 
-import type { JobType } from '@chup/core/entities';
-import { useRecruitment } from '@chup/core/entities';
-import { Badge, Button, StatCard } from '@chup/ui';
-import { BriefcaseBusiness, ChevronRight, Send, Sparkles, UserRoundCheck } from 'lucide-react';
-
-import { JobCard } from '@/entities/job';
-import { JobDetail } from '@/widgets/job-detail';
+import { useGetStudentDashboard } from '@/entities/dashboard';
 
 const HomeView = () => {
-  const { applications, jobs } = useRecruitment();
-  const [selectedJob, setSelectedJob] = useState<JobType | null>(null);
-  const activeJobs = jobs.filter((job) => job.status === '모집중');
-  const myApplications = applications.filter((application) => application.name === '김도윤');
+  const { data: dashboard, isError, isPending } = useGetStudentDashboard();
 
   return (
     <div className="flex flex-col gap-7">
       <section className="bg-primary text-primary-foreground relative overflow-hidden rounded-3xl p-6 md:p-8">
         <div className="relative z-10 max-w-xl">
           <Badge className="bg-primary-foreground/15 text-primary-foreground hover:bg-primary-foreground/15">
-            <Sparkles /> 이번 주 신규 공고 3개
+            <Sparkles />
+            {dashboard ? `추천 공고 ${dashboard.recommendedJobs.length}개` : '추천 공고'}
           </Badge>
           <h1 className="mt-5 text-3xl leading-tight font-bold text-balance md:text-4xl">
             꿈꾸는 커리어의 시작,
@@ -44,19 +55,19 @@ const HomeView = () => {
       <section className="grid gap-4 sm:grid-cols-3">
         <StatCard
           label="모집중 공고"
-          value={`${activeJobs.length}개`}
+          value={dashboard ? `${dashboard.openJobs}개` : '-'}
           note="지금 지원할 수 있어요"
           icon={BriefcaseBusiness}
         />
         <StatCard
           label="나의 지원"
-          value={`${myApplications.length}건`}
+          value={dashboard ? `${dashboard.myApplications}건` : '-'}
           note="최근 지원 현황"
           icon={Send}
         />
         <StatCard
           label="서류 합격"
-          value={`${myApplications.filter((application) => application.status === '서류 합격').length}건`}
+          value={dashboard ? `${dashboard.passed}건` : '-'}
           note="새로운 결과가 있어요"
           icon={UserRoundCheck}
         />
@@ -73,12 +84,45 @@ const HomeView = () => {
           </Button>
         </div>
         <div className="grid gap-4 lg:grid-cols-3">
-          {activeJobs.slice(0, 3).map((job) => (
-            <JobCard key={job.id} job={job} onOpen={setSelectedJob} />
+          {isPending && (
+            <div className="text-muted-foreground col-span-full flex flex-col items-center gap-2 py-10 text-sm">
+              <Loader2 className="size-5 animate-spin" />
+              추천 공고를 불러오는 중이에요.
+            </div>
+          )}
+          {isError && (
+            <div className="text-muted-foreground col-span-full flex flex-col items-center gap-2 py-10 text-sm">
+              <CircleAlert className="size-5" />
+              추천 공고를 불러오지 못했어요. 잠시 후 다시 시도해주세요.
+            </div>
+          )}
+          {!isPending && !isError && dashboard?.recommendedJobs.length === 0 && (
+            <div className="text-muted-foreground col-span-full flex flex-col items-center gap-2 py-10 text-sm">
+              <Inbox className="size-5" />
+              현재 추천할 공고가 없어요.
+            </div>
+          )}
+          {dashboard?.recommendedJobs.map((job) => (
+            <Card key={job.id} className="justify-between">
+              <CardHeader>
+                <CardTitle>{job.companyName}</CardTitle>
+                <CardDescription>추천 채용 공고</CardDescription>
+              </CardHeader>
+              <CardContent className="flex items-center justify-between gap-3">
+                <Badge variant="secondary">D-{job.dDay}</Badge>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => (window.location.href = '/jobs')}
+                >
+                  공고 보기
+                  <ChevronRight data-icon="inline-end" />
+                </Button>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </section>
-      {selectedJob && <JobDetail job={selectedJob} onClose={() => setSelectedJob(null)} />}
     </div>
   );
 };
