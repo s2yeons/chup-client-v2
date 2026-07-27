@@ -1,0 +1,28 @@
+import { API_BASE_URL, authUrl } from '@chup/core/shared';
+import { BrandLogo, Button } from '@chup/ui';
+
+const SigninView = () => {
+  const loginUrl = `${API_BASE_URL}${authUrl.getDatagsmLogin()}`;
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-8 px-4">
+      <BrandLogo imageSrc="/chup-logo.png" name="CHUP" />
+      <div className="text-center">
+        <h1 className="text-2xl font-bold">CHUP 관리자 로그인</h1>
+        <p className="text-muted-foreground mt-2 text-sm">
+          DataGSM 계정으로 로그인하고 채용 공고와 지원자를 관리할 수 있어요.
+        </p>
+      </div>
+      <Button
+        size="lg"
+        className="w-full max-w-xs"
+        nativeButton={false}
+        render={<a href={loginUrl} />}
+      >
+        DataGSM으로 로그인
+      </Button>
+    </div>
+  );
+};
+
+export default SigninView;
