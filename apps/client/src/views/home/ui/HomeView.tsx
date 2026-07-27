@@ -7,14 +7,17 @@ import { useRecruitment } from '@chup/core/entities';
 import { Badge, Button, StatCard } from '@chup/ui';
 import { BriefcaseBusiness, ChevronRight, Send, Sparkles, UserRoundCheck } from 'lucide-react';
 
+import { useGetApplications } from '@/entities/application';
 import { JobCard } from '@/entities/job';
 import { JobDetail } from '@/widgets/job-detail';
 
 const HomeView = () => {
-  const { applications, jobs } = useRecruitment();
+  const { jobs } = useRecruitment();
+  const { data: applications } = useGetApplications();
   const [selectedJob, setSelectedJob] = useState<JobType | null>(null);
   const activeJobs = jobs.filter((job) => job.status === '모집중');
-  const myApplications = applications.filter((application) => application.name === '김도윤');
+  const passedCount =
+    applications?.filter((application) => application.status === 'PASSED').length ?? 0;
 
   return (
     <div className="flex flex-col gap-7">
@@ -50,13 +53,13 @@ const HomeView = () => {
         />
         <StatCard
           label="나의 지원"
-          value={`${myApplications.length}건`}
+          value={`${applications?.length ?? 0}건`}
           note="최근 지원 현황"
           icon={Send}
         />
         <StatCard
           label="서류 합격"
-          value={`${myApplications.filter((application) => application.status === '서류 합격').length}건`}
+          value={`${passedCount}건`}
           note="새로운 결과가 있어요"
           icon={UserRoundCheck}
         />

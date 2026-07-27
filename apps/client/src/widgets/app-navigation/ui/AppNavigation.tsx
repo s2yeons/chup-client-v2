@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import { AppMain, AppShell, AppSidebar, BrandLogo, Button, cn, ThemeToggle } from '@chup/ui';
 import { LogOut, Menu, X } from 'lucide-react';
 
+import { useGetMe } from '@/entities/user';
 import { usePostLogout } from '@/features/logout';
 
 import { CLIENT_LOGO_URL, clientNavigationItems } from '../model/navigation';
@@ -20,6 +21,7 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const { mutate: logout } = usePostLogout();
+  const { data: me } = useGetMe(pathname !== '/signin');
 
   const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
 
@@ -55,8 +57,8 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
       </div>
       <div className="p-3">
         <div className="bg-secondary rounded-2xl p-3">
-          <p className="text-sm font-semibold">김도윤</p>
-          <p className="text-muted-foreground text-xs">2314 · 학생</p>
+          <p className="text-sm font-semibold">{me?.name ?? '···'}</p>
+          <p className="text-muted-foreground text-xs">{me ? `${me.studentId} · 학생` : ''}</p>
         </div>
         <div className="mt-2 flex items-center justify-between px-1">
           <span className="text-muted-foreground text-sm">테마</span>

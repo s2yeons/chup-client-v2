@@ -6,6 +6,7 @@ import type { JobType } from '@chup/core/entities';
 import { Badge, Button, Separator, toast } from '@chup/ui';
 import { Download, FileText, X } from 'lucide-react';
 
+import { useGetMe } from '@/entities/user';
 import { ApplyButton } from '@/features/job-apply';
 
 interface JobDetailProps {
@@ -15,6 +16,7 @@ interface JobDetailProps {
 
 const JobDetail = ({ job, onClose }: JobDetailProps) => {
   const [position, setPosition] = useState<string>(job.positions[0]);
+  const { data: me } = useGetMe();
 
   return (
     <div className="bg-foreground/20 fixed inset-0 z-50 flex justify-end" onMouseDown={onClose}>
@@ -96,7 +98,7 @@ const JobDetail = ({ job, onClose }: JobDetailProps) => {
           <div className="flex items-center gap-3">
             <FileText className="text-primary size-5" />
             <div>
-              <p className="text-sm font-semibold">김도윤_2314_이력서.pdf</p>
+              <p className="text-sm font-semibold">{`${me?.name}_${me?.studentId}_이력서.pdf`}</p>
               <p className="text-muted-foreground text-xs">등록된 이력서로 지원합니다.</p>
             </div>
           </div>
