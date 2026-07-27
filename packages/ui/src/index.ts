@@ -14,3 +14,5 @@ export * from './ui/separator';
 export * from './ui/sonner';
 export * from './ui/stat-card';
 export * from './ui/tabs';
+export * from './ui/theme-provider';
+export * from './ui/theme-toggle';
