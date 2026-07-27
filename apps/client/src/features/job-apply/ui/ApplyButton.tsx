@@ -5,6 +5,8 @@ import { useRecruitment } from '@chup/core/entities';
 import { Button, toast } from '@chup/ui';
 import { Send } from 'lucide-react';
 
+import { useGetMe } from '@/entities/user';
+
 interface ApplyButtonProps {
   job: JobType;
   position: string;
@@ -13,11 +15,12 @@ interface ApplyButtonProps {
 
 const ApplyButton = ({ job, position, onComplete }: ApplyButtonProps) => {
   const { applications, setApplications } = useRecruitment();
+  const { data: me } = useGetMe();
 
   const handleApply = () => {
     const hasApplied = applications.some(
       (application) =>
-        application.name === '김도윤' &&
+        application.name === me?.name &&
         application.company === job.company &&
         application.position === position,
     );
@@ -30,13 +33,13 @@ const ApplyButton = ({ job, position, onComplete }: ApplyButtonProps) => {
     setApplications((currentApplications) => [
       {
         id: Date.now(),
-        name: '김도윤',
-        studentId: '2314',
+        name: me?.name ?? '',
+        studentId: me?.studentId ?? '',
         company: job.company,
         position,
         date: '2026.07.20 12:00',
-        email: 'doyun@gsm.hs.kr',
-        phone: '010-2381-7721',
+        email: me?.email ?? '',
+        phone: me?.phoneNumber ?? '',
         status: '지원 완료',
       },
       ...currentApplications,

@@ -5,14 +5,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, StatCard } f
 import { BriefcaseBusiness, Clock3, UsersRound } from 'lucide-react';
 
 import { StatusBadge } from '@/entities/application';
+import { useGetMe } from '@/entities/user';
 
 const DashboardView = () => {
   const { applications, jobs } = useRecruitment();
+  const { data: me } = useGetMe();
   return (
     <div className="flex flex-col gap-7">
       <div>
         <p className="text-primary text-sm font-semibold">관리 대시보드</p>
-        <h1 className="mt-1 text-3xl font-bold">좋은 아침이에요, 김도윤 선생님</h1>
+        <h1 className="mt-1 text-3xl font-bold">좋은 아침이에요, {me?.name ?? ''} 선생님</h1>
         <p className="text-muted-foreground mt-2">오늘 확인할 채용 현황을 모아봤어요.</p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
