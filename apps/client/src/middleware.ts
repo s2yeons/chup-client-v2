@@ -1,8 +1,10 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import { SESSION_COOKIE_KEY } from '@chup/core/shared';
+
 export function middleware(request: NextRequest) {
-  const hasSession = request.cookies.has('SESSION');
+  const hasSession = request.cookies.has(SESSION_COOKIE_KEY);
 
   if (!hasSession && request.nextUrl.pathname !== '/signin') {
     return NextResponse.redirect(new URL('/signin', request.url));
