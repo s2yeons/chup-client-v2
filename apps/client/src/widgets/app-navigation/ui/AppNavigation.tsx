@@ -5,8 +5,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { AppMain, AppShell, AppSidebar, BrandLogo, Button, cn, ThemeToggle, toast } from '@chup/ui';
+import { AppMain, AppShell, AppSidebar, BrandLogo, Button, cn, ThemeToggle } from '@chup/ui';
 import { LogOut, Menu, X } from 'lucide-react';
+
+import { usePostLogout } from '@/features/logout';
 
 import { CLIENT_LOGO_URL, clientNavigationItems } from '../model/navigation';
 
@@ -17,8 +19,11 @@ interface AppNavigationProps {
 const AppNavigation = ({ children }: AppNavigationProps) => {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const { mutate: logout } = usePostLogout();
 
   const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
+
+  if (pathname === '/signin') return children;
 
   const navigationContent = (mobile = false) => (
     <AppSidebar mobile={mobile}>
@@ -60,7 +65,7 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
         <Button
           variant="ghost"
           className="text-muted-foreground w-full justify-start"
-          onClick={() => toast.info('로그아웃 기능은 준비 중입니다.')}
+          onClick={() => logout()}
         >
           <LogOut />
           로그아웃
