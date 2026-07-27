@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 import { SESSION_COOKIE_KEY } from '@chup/core/shared';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const hasSession = request.cookies.has(SESSION_COOKIE_KEY);
 
   if (!hasSession && request.nextUrl.pathname !== '/signin') {
