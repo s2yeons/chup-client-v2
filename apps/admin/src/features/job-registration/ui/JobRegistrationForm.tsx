@@ -20,14 +20,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, X } from 'lucide-react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 
-import {
-  type AdminJobPostingType,
-  employmentTypeMeta,
-  useGetAdminJob,
-} from '@/entities/dashboard';
+import { type AdminJobPostingType, employmentTypeMeta, useGetAdminJob } from '@/entities/dashboard';
 
 import { getServerValidationError } from '../lib/getServerErrorMessage';
-import { type JobRegistrationReqType,JobRegistrationSchema } from '../model/schema';
+import { type JobRegistrationReqType, JobRegistrationSchema } from '../model/schema';
 import { usePatchJob } from '../model/usePatchJob';
 import { usePostJob } from '../model/usePostJob';
 
@@ -151,8 +147,14 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
       <CardContent>
         <form className="grid gap-4 sm:grid-cols-2" onSubmit={handleSubmit(handleSubmitForm)}>
           <div>
-            <Input {...register('companyName')} placeholder="회사명" aria-invalid={!!errors.companyName} />
-            {errors.companyName && <p className="text-destructive mt-1 text-sm">{errors.companyName.message}</p>}
+            <Input
+              {...register('companyName')}
+              placeholder="회사명"
+              aria-invalid={!!errors.companyName}
+            />
+            {errors.companyName && (
+              <p className="text-destructive mt-1 text-sm">{errors.companyName.message}</p>
+            )}
           </div>
           <div>
             <Controller
@@ -173,7 +175,9 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
                 </Select>
               )}
             />
-            {errors.employmentType && <p className="text-destructive mt-1 text-sm">{errors.employmentType.message}</p>}
+            {errors.employmentType && (
+              <p className="text-destructive mt-1 text-sm">{errors.employmentType.message}</p>
+            )}
           </div>
           <div className="sm:col-span-2">
             <textarea
@@ -182,15 +186,21 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
               aria-invalid={!!errors.description}
               className="border-input focus-visible:border-ring focus-visible:ring-ring/50 [field-sizing:content] min-h-28 w-full resize-none rounded-lg border bg-transparent px-3 py-2 text-sm outline-none focus-visible:ring-3"
             />
-            {errors.description && <p className="text-destructive mt-1 text-sm">{errors.description.message}</p>}
+            {errors.description && (
+              <p className="text-destructive mt-1 text-sm">{errors.description.message}</p>
+            )}
           </div>
           <div>
             <Input type="date" {...register('recruitStart')} aria-invalid={!!errors.recruitStart} />
-            {errors.recruitStart && <p className="text-destructive mt-1 text-sm">{errors.recruitStart.message}</p>}
+            {errors.recruitStart && (
+              <p className="text-destructive mt-1 text-sm">{errors.recruitStart.message}</p>
+            )}
           </div>
           <div>
             <Input type="date" {...register('recruitEnd')} aria-invalid={!!errors.recruitEnd} />
-            {errors.recruitEnd && <p className="text-destructive mt-1 text-sm">{errors.recruitEnd.message}</p>}
+            {errors.recruitEnd && (
+              <p className="text-destructive mt-1 text-sm">{errors.recruitEnd.message}</p>
+            )}
           </div>
           <div className="sm:col-span-2">
             <div className="flex flex-wrap gap-2">
@@ -219,7 +229,9 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
                   </Button>
                 ))}
             </div>
-            {errors.positionNames && <p className="text-destructive mt-1 text-sm">{errors.positionNames.message}</p>}
+            {errors.positionNames && (
+              <p className="text-destructive mt-1 text-sm">{errors.positionNames.message}</p>
+            )}
           </div>
           <div className="flex gap-2 sm:col-span-2">
             <Input
@@ -234,7 +246,8 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
               placeholder="모집 포지션 직접 입력"
             />
             <Button type="button" variant="outline" onClick={handleCustomPositionAdd}>
-              <Plus />추가
+              <Plus />
+              추가
             </Button>
           </div>
           <div className="space-y-2 sm:col-span-2">
@@ -245,10 +258,17 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
               disabled={attachments.length === 5}
               onChange={handleAttachmentChange}
             />
-            <p className="text-muted-foreground text-sm">첨부파일은 최대 5개까지 등록할 수 있습니다.</p>
-            {errors.attachments && <p className="text-destructive text-sm">{errors.attachments.message}</p>}
+            <p className="text-muted-foreground text-sm">
+              첨부파일은 최대 5개까지 등록할 수 있습니다.
+            </p>
+            {errors.attachments && (
+              <p className="text-destructive text-sm">{errors.attachments.message}</p>
+            )}
             {attachments.map((attachment) => (
-              <div key={`${attachment.name}-${attachment.lastModified}`} className="flex items-center justify-between">
+              <div
+                key={`${attachment.name}-${attachment.lastModified}`}
+                className="flex items-center justify-between"
+              >
                 <span className="text-sm">{attachment.name}</span>
                 <Button
                   type="button"
@@ -268,7 +288,9 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
               </div>
             ))}
           </div>
-          {errors.root && <p className="text-destructive text-sm sm:col-span-2">{errors.root.message}</p>}
+          {errors.root && (
+            <p className="text-destructive text-sm sm:col-span-2">{errors.root.message}</p>
+          )}
           <div className="flex justify-end gap-2 sm:col-span-2">
             <Button type="button" variant="outline" onClick={onClose}>
               취소
