@@ -61,7 +61,7 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
   });
   const positionNames = useWatch({ control, name: 'positionNames' }) ?? [];
   const attachments = useWatch({ control, name: 'attachments' }) ?? [];
-  const isPending = isPostPending || isPatchPending || isJobPending;
+  const isPending = isPostPending || isPatchPending || (!!job && isJobPending);
 
   useEffect(() => {
     if (!job) return;
