@@ -3,6 +3,10 @@ export type EmploymentType =
 
 export type JobStatusType = 'RECRUITING' | 'CLOSED';
 
+export interface GetAdminJobsParamsType {
+  q?: string;
+}
+
 export interface AdminDashboardType {
   openJobs: number;
   totalApplicants: number;
@@ -19,6 +23,11 @@ export interface AdminJobPostingType {
   recruitEnd: string;
   status: JobStatusType;
   createdAt: string;
+}
+
+export interface AdminJobPostingDetailType extends AdminJobPostingType {
+  positions: { id: number; name: string }[];
+  attachments: { id: number; fileName: string }[];
 }
 
 export const employmentTypeMeta: Record<EmploymentType, { label: string }> = {

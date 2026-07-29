@@ -5,16 +5,17 @@ import { useQuery } from '@tanstack/react-query';
 
 import { adminDashboardUrl } from '../api/endpoints';
 import { adminDashboardQueryKeys } from './queryKeys';
-import type { AdminJobPostingType, GetAdminJobsParamsType } from './types';
+import type { AdminJobPostingDetailType } from './types';
 
-export const useGetAdminJobs = (params: GetAdminJobsParamsType = {}) =>
+export const useGetAdminJob = (jobId?: number) =>
   useQuery({
-    queryKey: adminDashboardQueryKeys.getJobs(params),
+    queryKey: adminDashboardQueryKeys.getJob(jobId),
     queryFn: async () => {
-      const response = await get<ApiResponseType<AdminJobPostingType[]>>(
-        adminDashboardUrl.getJobs(params.q),
+      const response = await get<ApiResponseType<AdminJobPostingDetailType>>(
+        adminDashboardUrl.getJob(jobId!),
       );
 
       return response.data;
     },
+    enabled: !!jobId,
   });
