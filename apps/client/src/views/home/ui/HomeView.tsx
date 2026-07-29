@@ -38,7 +38,7 @@ const HomeView = () => {
             꿈꾸는 커리어의 시작,
             <br />한 곳에서 빠르게.
           </h1>
-          <p className="text-primary-foreground/80 mt-3 max-w-md text-sm leading-relaxed md:text-base">
+          <p className="text-primary-foreground/80 mt-3 text-sm leading-relaxed md:text-base">
             학교에 도착한 채용 소식을 확인하고, 등록한 이력서로 간편하게 지원하세요.
           </p>
           <Button
