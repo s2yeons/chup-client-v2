@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
   Button,
@@ -20,7 +20,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, X } from 'lucide-react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 
-import { type AdminJobPostingType, employmentTypeMeta, useGetAdminJob } from '@/entities/dashboard';
+import {
+  type AdminJobPostingType,
+  type EmploymentType,
+  employmentTypeMeta,
+  useGetAdminJob,
+} from '@/entities/dashboard';
 
 import { getServerValidationError } from '../lib/getServerErrorMessage';
 import { type JobRegistrationReqType, JobRegistrationSchema } from '../model/schema';
@@ -61,11 +66,14 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
   });
   const positionNames = useWatch({ control, name: 'positionNames' }) ?? [];
   const attachments = useWatch({ control, name: 'attachments' }) ?? [];
-  const isPending = isPostPending || isPatchPending || isJobPending;
+  const isPending = isPostPending || isPatchPending || (!!job && isJobPending);
+  const initializedJobIdRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
-    if (!job) return;
+    if (!job || isJobPending) return;
+    if (initializedJobIdRef.current === job.id) return;
 
+    initializedJobIdRef.current = job.id;
     reset({
       companyName: job.companyName,
       description: job.description,
@@ -75,7 +83,7 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
       positionNames: jobDetail?.positions.map((position) => position.name) ?? [],
       attachments: [],
     });
-  }, [job, jobDetail, reset]);
+  }, [job, jobDetail, isJobPending, reset]);
 
   const setServerError = (error: unknown) => {
     const { fieldErrors, message } = getServerValidationError(error);
@@ -163,7 +171,11 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
               render={({ field }) => (
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger aria-invalid={!!errors.employmentType}>
-                    <SelectValue placeholder="고용 형태" />
+                    <SelectValue placeholder="고용 형태">
+                      {(value: EmploymentType | null) =>
+                        value ? employmentTypeMeta[value].label : '고용 형태'
+                      }
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent side="bottom" align="start" alignItemWithTrigger={false}>
                     {Object.entries(employmentTypeMeta).map(([value, { label }]) => (
