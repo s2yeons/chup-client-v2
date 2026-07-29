@@ -25,7 +25,9 @@ const ProfileView = () => {
   const { data: resume, isPending: isResumePending, isError: isResumeError } = useGetResume();
   const { mutate: patchPhoneNumber, isPending: isPhoneSaving } = usePatchPhoneNumber();
 
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>(
+    user?.phoneNumber?.replace(/\D/g, '') ?? '',
+  );
   const [syncedPhoneNumber, setSyncedPhoneNumber] = useState<string | null | undefined>(
     user?.phoneNumber,
   );

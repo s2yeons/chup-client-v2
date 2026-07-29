@@ -28,9 +28,9 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
   const navigationContent = (mobile = false) => (
     <AppSidebar mobile={mobile}>
       {!mobile && (
-        <div className="flex h-16 shrink-0 items-center px-5">
+        <Link href="/" className="flex h-16 shrink-0 items-center px-5">
           <BrandLogo imageSrc={ADMIN_LOGO_URL} name="CHUP" />
-        </div>
+        </Link>
       )}
       <div className="flex flex-1 flex-col gap-1 p-3 pt-0">
         <p className="text-muted-foreground px-3 pt-3 pb-2 text-xs font-semibold tracking-wider uppercase">
@@ -86,7 +86,9 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
           >
             <Menu />
           </Button>
-          <BrandLogo imageSrc={ADMIN_LOGO_URL} name="CHUP" />
+          <Link href="/">
+            <BrandLogo imageSrc={ADMIN_LOGO_URL} name="CHUP" />
+          </Link>
         </header>
         <AppMain>
           <div className="mx-auto max-w-7xl">{children}</div>
@@ -102,7 +104,9 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
             onMouseDown={(event) => event.stopPropagation()}
           >
             <div className="flex h-16 shrink-0 items-center justify-between px-5">
-              <BrandLogo imageSrc={ADMIN_LOGO_URL} name="CHUP" />
+              <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+                <BrandLogo imageSrc={ADMIN_LOGO_URL} name="CHUP" />
+              </Link>
               <Button
                 variant="ghost"
                 size="icon"

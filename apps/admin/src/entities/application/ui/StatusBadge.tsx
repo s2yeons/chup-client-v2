@@ -1,10 +1,9 @@
-import type { JobStatusType } from '@chup/core/entities';
 import { Badge } from '@chup/ui';
 
 import type { ApplicationStatusType } from '../model/types';
 
 interface StatusBadgeProps {
-  status: ApplicationStatusType | JobStatusType | 'RECRUITING' | 'CLOSED';
+  status: ApplicationStatusType | 'RECRUITING' | 'CLOSED';
 }
 
 const APPLICATION_STATUS_META: Record<
@@ -34,7 +33,7 @@ const StatusBadge = ({ status }: StatusBadgeProps) => {
       </Badge>
     );
   }
-  if (status === '마감' || status === 'CLOSED') return <Badge variant="secondary">마감</Badge>;
+  if (status === 'CLOSED') return <Badge variant="secondary">마감</Badge>;
   return (
     <Badge className="bg-primary/10 text-primary hover:bg-primary/10">
       {status === 'RECRUITING' ? '모집중' : status}
