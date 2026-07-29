@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { ThemeProvider, Toaster } from '@chup/ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
@@ -25,10 +26,13 @@ const Providers = ({ children }: ProvidersProps) => {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <QueryClientProvider client={queryClient}>
+        {children}
+        <ReactQueryDevtools initialIsOpen={false} />
+        <Toaster position="top-center" richColors />
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 };
 

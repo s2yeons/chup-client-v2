@@ -1,3 +1,5 @@
 export const authUrl = {
-  putRefresh: () => '/v2/auth/refresh',
+  getDatagsmLogin: (redirectOrigin: string) =>
+    `/api/auth/datagsm/login?redirectOrigin=${encodeURIComponent(redirectOrigin)}`,
+  postLogout: () => '/api/auth/logout',
 } as const;

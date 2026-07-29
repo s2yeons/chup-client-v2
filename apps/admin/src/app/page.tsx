@@ -1,3 +1,3 @@
-import { Home } from '@/views/home';
+import { DashboardView } from '@/views/dashboard';
 
-export default Home;
+export default DashboardView;

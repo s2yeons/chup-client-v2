@@ -2,6 +2,8 @@ import localFont from 'next/font/local';
 
 import type { Metadata } from 'next';
 
+import { AppNavigation } from '@/widgets/app-navigation';
+
 import Providers from './providers';
 
 import '@chup/ui/styles.css';
@@ -25,9 +27,11 @@ const RootLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <html lang="ko" className={`font-sans ${pretendard.variable}`}>
+    <html lang="ko" className={`font-sans ${pretendard.variable}`} suppressHydrationWarning>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <AppNavigation>{children}</AppNavigation>
+        </Providers>
       </body>
     </html>
   );
