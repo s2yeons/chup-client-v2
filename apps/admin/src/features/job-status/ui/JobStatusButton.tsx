@@ -1,29 +1,26 @@
 'use client';
 
-import type { JobType } from '@chup/core/entities';
-import { useRecruitment } from '@chup/core/entities';
 import {
   Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  toast,
 } from '@chup/ui';
 import { MoreHorizontal } from 'lucide-react';
 
+import { type AdminJobPostingType } from '@/entities/dashboard';
+
+import { usePatchJobStatus } from '../model/usePatchJobStatus';
+
 interface JobStatusButtonProps {
-  job: JobType;
+  job: AdminJobPostingType;
+  onEdit: (job: AdminJobPostingType) => void;
 }
 
-const JobStatusButton = ({ job }: JobStatusButtonProps) => {
-  const { setJobs } = useRecruitment();
-  const handleStatusChange = (status: JobType['status']) => {
-    setJobs((jobs) =>
-      jobs.map((currentJob) => (currentJob.id === job.id ? { ...currentJob, status } : currentJob)),
-    );
-    toast.success(status === '마감' ? '공고를 마감했습니다.' : '모집을 재개했습니다.');
-  };
+const JobStatusButton = ({ job, onEdit }: JobStatusButtonProps) => {
+  const { mutate: patchJobStatus, isPending } = usePatchJobStatus();
+  const nextStatus = job.status === 'RECRUITING' ? 'CLOSED' : 'RECRUITING';
 
   return (
     <DropdownMenu>
@@ -34,10 +31,12 @@ const JobStatusButton = ({ job }: JobStatusButtonProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem
-          onClick={() => handleStatusChange(job.status === '모집중' ? '마감' : '모집중')}
+          onClick={() => patchJobStatus({ jobId: job.id, status: nextStatus })}
+          disabled={isPending}
         >
-          {job.status === '모집중' ? '공고 마감' : '모집 재개'}
+          {job.status === 'RECRUITING' ? '공고 마감' : '모집 재개'}
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onEdit(job)}>공고 수정</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
