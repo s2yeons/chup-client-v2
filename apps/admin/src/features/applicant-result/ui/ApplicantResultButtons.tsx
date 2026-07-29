@@ -1,35 +1,43 @@
 'use client';
 
-import type { ApplicationStatusType, ApplicationType } from '@chup/core/entities';
-import { useRecruitment } from '@chup/core/entities';
 import { Button, toast } from '@chup/ui';
+
+import type { ApplicationStatusType, ApplicationType } from '@/entities/application';
+import { usePatchApplicantResult } from '@/entities/application';
 
 interface ApplicantResultButtonsProps {
   application: ApplicationType;
 }
 
 const ApplicantResultButtons = ({ application }: ApplicantResultButtonsProps) => {
-  const { setApplications } = useRecruitment();
+  const { isPending, mutate: patchApplicantResult } = usePatchApplicantResult();
+
   const handleUpdate = (status: ApplicationStatusType) => {
-    setApplications((applications) =>
-      applications.map((currentApplication) =>
-        currentApplication.id === application.id
-          ? { ...currentApplication, status }
-          : currentApplication,
-      ),
-    );
-    toast.success(
-      status === '서류 합격'
-        ? '합격 처리 후 안내 이메일을 발송했습니다.'
-        : '지원 결과가 변경되었습니다.',
+    patchApplicantResult(
+      { applicationId: application.id, status },
+      {
+        onSuccess: () =>
+          toast.success(
+            status === 'PASSED'
+              ? '합격 처리 후 안내 이메일을 발송했습니다.'
+              : '지원 결과가 변경되었습니다.',
+          ),
+        onError: () => toast.error('결과 처리에 실패했어요. 다시 시도해주세요.'),
+      },
     );
   };
+
   return (
     <div className="flex gap-1">
-      <Button variant="outline" size="sm" onClick={() => handleUpdate('서류 합격')}>
+      <Button
+        variant="outline"
+        size="sm"
+        disabled={isPending}
+        onClick={() => handleUpdate('PASSED')}
+      >
         합격
       </Button>
-      <Button variant="ghost" size="sm" onClick={() => handleUpdate('서류 불합격')}>
+      <Button variant="ghost" size="sm" disabled={isPending} onClick={() => handleUpdate('FAILED')}>
         불합격
       </Button>
     </div>
