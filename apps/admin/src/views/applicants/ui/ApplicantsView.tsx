@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 
-import { useRecruitment } from '@chup/core/entities';
 import {
   Avatar,
   AvatarFallback,
@@ -12,24 +11,29 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  toast,
 } from '@chup/ui';
-import { Download, FileArchive } from 'lucide-react';
+import { CircleAlert, Download, FileArchive, Inbox, Loader2 } from 'lucide-react';
 
-import { StatusBadge } from '@/entities/application';
+import { applicantUrl, StatusBadge, useGetApplicants } from '@/entities/application';
 import { ApplicantResultButtons } from '@/features/applicant-result';
 
+import { formatAppliedAt } from '../lib/formatAppliedAt';
+
 const ApplicantsView = () => {
-  const { applications } = useRecruitment();
-  const [company, setCompany] = useState<string>('전체');
-  const companies = [
-    '전체',
-    ...Array.from(new Set(applications.map((application) => application.company))),
-  ];
-  const filteredApplications =
-    company === '전체'
-      ? applications
-      : applications.filter((application) => application.company === company);
+  const { data: applicants, isPending, isError } = useGetApplicants();
+  const [jobPostingId, setJobPostingId] = useState<number>();
+
+  const companies = Array.from(
+    new Map(
+      applicants?.map((applicant) => [applicant.jobPosting.id, applicant.jobPosting]) ?? [],
+    ).values(),
+  );
+  const selectedCompanyName = companies.find((company) => company.id === jobPostingId)?.companyName;
+  const filteredApplicants =
+    jobPostingId === undefined
+      ? applicants
+      : applicants?.filter((applicant) => applicant.jobPosting.id === jobPostingId);
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
@@ -41,32 +45,40 @@ const ApplicantsView = () => {
           </p>
         </div>
         <Button
-          onClick={() =>
-            toast.success(
-              `${company === '전체' ? '전체 회사' : company} 지원 서류 ZIP을 준비했습니다.`,
-            )
-          }
+          nativeButton={false}
+          render={<a href={applicantUrl.getApplicantsZip(jobPostingId)} download />}
         >
           <FileArchive />
           ZIP 다운로드
         </Button>
       </div>
       <div className="flex flex-wrap gap-2">
-        {companies.map((item) => (
+        <Button
+          size="sm"
+          variant={jobPostingId === undefined ? 'default' : 'outline'}
+          onClick={() => setJobPostingId(undefined)}
+        >
+          전체
+        </Button>
+        {companies.map((company) => (
           <Button
-            key={item}
+            key={company.id}
             size="sm"
-            variant={company === item ? 'default' : 'outline'}
-            onClick={() => setCompany(item)}
+            variant={jobPostingId === company.id ? 'default' : 'outline'}
+            onClick={() => setJobPostingId(company.id)}
           >
-            {item}
+            {company.companyName}
           </Button>
         ))}
       </div>
       <Card className="pb-1">
         <CardHeader>
-          <CardTitle>{company === '전체' ? '전체 지원자' : `${company} 지원자`}</CardTitle>
-          <CardDescription>총 {filteredApplications.length}명의 지원자가 있습니다.</CardDescription>
+          <CardTitle>
+            {selectedCompanyName ? `${selectedCompanyName} 지원자` : '전체 지원자'}
+          </CardTitle>
+          <CardDescription>
+            총 {filteredApplicants?.length ?? 0}명의 지원자가 있습니다.
+          </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
@@ -83,45 +95,74 @@ const ApplicantsView = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredApplications.map((application) => (
-                  <tr key={application.id} className="border-t">
+                {isPending && (
+                  <tr>
+                    <td colSpan={7} className="text-muted-foreground py-10 text-center text-sm">
+                      <div className="flex flex-col items-center gap-2">
+                        <Loader2 className="size-5 animate-spin" />
+                        지원자 목록을 불러오는 중이에요.
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                {isError && (
+                  <tr>
+                    <td colSpan={7} className="text-muted-foreground py-10 text-center text-sm">
+                      <div className="flex flex-col items-center gap-2">
+                        <CircleAlert className="size-5" />
+                        지원자 목록을 불러오지 못했어요. 잠시 후 다시 시도해주세요.
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                {!isPending && !isError && filteredApplicants?.length === 0 && (
+                  <tr>
+                    <td colSpan={7} className="text-muted-foreground py-10 text-center text-sm">
+                      <div className="flex flex-col items-center gap-2">
+                        <Inbox className="size-5" />
+                        아직 지원자가 없어요.
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                {filteredApplicants?.map((applicant) => (
+                  <tr key={applicant.id} className="border-t">
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
                         <Avatar className="size-9">
-                          <AvatarFallback>{application.name.slice(0, 1)}</AvatarFallback>
+                          <AvatarFallback>{applicant.user.name.slice(0, 1)}</AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="font-semibold">
-                            {application.name} · {application.studentId}
+                            {applicant.user.name} · {applicant.user.studentId ?? '-'}
                           </p>
-                          <p className="text-muted-foreground text-xs">{application.email}</p>
+                          <p className="text-muted-foreground text-xs">{applicant.user.email}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-5 py-4">{application.phone}</td>
-                    <td className="px-5 py-4 font-medium">{application.company}</td>
-                    <td className="px-5 py-4">{application.position}</td>
+                    <td className="px-5 py-4">{applicant.user.phoneNumber ?? '-'}</td>
+                    <td className="px-5 py-4 font-medium">{applicant.jobPosting.companyName}</td>
+                    <td className="px-5 py-4">{applicant.jobPosition.name}</td>
                     <td className="text-muted-foreground px-5 py-4">
-                      {application.date.split(' ')[0]}
+                      {formatAppliedAt(applicant.appliedAt)}
                     </td>
                     <td className="px-5 py-4">
-                      <StatusBadge status={application.status} />
+                      <StatusBadge status={applicant.status} />
                     </td>
                     <td className="px-5 py-4">
                       <div className="flex gap-1">
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() =>
-                            toast.success(
-                              `${application.name}_${application.studentId}_${application.position}.pdf 다운로드`,
-                            )
+                          nativeButton={false}
+                          render={
+                            <a href={applicantUrl.getApplicantResume(applicant.id)} download />
                           }
                           aria-label="이력서 다운로드"
                         >
                           <Download />
                         </Button>
-                        <ApplicantResultButtons application={application} />
+                        <ApplicantResultButtons application={applicant} />
                       </div>
                     </td>
                   </tr>
