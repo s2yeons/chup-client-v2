@@ -47,7 +47,6 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
   const {
     control,
     handleSubmit,
-    register,
     reset,
     setError,
     setValue,
@@ -155,10 +154,12 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
       <CardContent>
         <form className="grid gap-4 sm:grid-cols-2" onSubmit={handleSubmit(handleSubmitForm)}>
           <div>
-            <Input
-              {...register('companyName')}
-              placeholder="회사명"
-              aria-invalid={!!errors.companyName}
+            <Controller
+              control={control}
+              name="companyName"
+              render={({ field }) => (
+                <Input {...field} placeholder="회사명" aria-invalid={!!errors.companyName} />
+              )}
             />
             {errors.companyName && (
               <p className="text-destructive mt-1 text-sm">{errors.companyName.message}</p>
@@ -192,24 +193,42 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
             )}
           </div>
           <div className="sm:col-span-2">
-            <textarea
-              {...register('description')}
-              placeholder="회사 소개"
-              aria-invalid={!!errors.description}
-              className="border-input focus-visible:border-ring focus-visible:ring-ring/50 [field-sizing:content] min-h-28 w-full resize-none rounded-lg border bg-transparent px-3 py-2 text-sm outline-none focus-visible:ring-3"
+            <Controller
+              control={control}
+              name="description"
+              render={({ field }) => (
+                <textarea
+                  {...field}
+                  placeholder="회사 소개"
+                  aria-invalid={!!errors.description}
+                  className="border-input focus-visible:border-ring focus-visible:ring-ring/50 [field-sizing:content] min-h-28 w-full resize-none rounded-lg border bg-transparent px-3 py-2 text-sm outline-none focus-visible:ring-3"
+                />
+              )}
             />
             {errors.description && (
               <p className="text-destructive mt-1 text-sm">{errors.description.message}</p>
             )}
           </div>
           <div>
-            <Input type="date" {...register('recruitStart')} aria-invalid={!!errors.recruitStart} />
+            <Controller
+              control={control}
+              name="recruitStart"
+              render={({ field }) => (
+                <Input type="date" {...field} aria-invalid={!!errors.recruitStart} />
+              )}
+            />
             {errors.recruitStart && (
               <p className="text-destructive mt-1 text-sm">{errors.recruitStart.message}</p>
             )}
           </div>
           <div>
-            <Input type="date" {...register('recruitEnd')} aria-invalid={!!errors.recruitEnd} />
+            <Controller
+              control={control}
+              name="recruitEnd"
+              render={({ field }) => (
+                <Input type="date" {...field} aria-invalid={!!errors.recruitEnd} />
+              )}
+            />
             {errors.recruitEnd && (
               <p className="text-destructive mt-1 text-sm">{errors.recruitEnd.message}</p>
             )}
