@@ -1,8 +1,12 @@
+'use client';
+
 import { API_BASE_URL, authUrl } from '@chup/core/shared';
 import { BrandLogo, Button } from '@chup/ui';
 
 const SigninView = () => {
-  const loginUrl = `${API_BASE_URL}${authUrl.getDatagsmLogin()}`;
+  const handleLogin = () => {
+    window.location.href = `${API_BASE_URL}${authUrl.getDatagsmLogin(window.location.origin)}`;
+  };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-8 px-4">
@@ -13,12 +17,7 @@ const SigninView = () => {
           DataGSM 계정으로 로그인하고 채용 공고와 지원 현황을 확인할 수 있어요.
         </p>
       </div>
-      <Button
-        size="lg"
-        className="w-full max-w-xs"
-        nativeButton={false}
-        render={<a href={loginUrl} />}
-      >
+      <Button size="lg" className="w-full max-w-xs" onClick={handleLogin}>
         DataGSM으로 로그인
       </Button>
     </div>
