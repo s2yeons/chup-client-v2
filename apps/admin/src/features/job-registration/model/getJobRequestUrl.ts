@@ -1,6 +1,10 @@
 import type { JobRegistrationReqType } from './schema';
 
-export const getJobRequestUrl = (path: string, body: JobRegistrationReqType) => {
+export const getJobRequestUrl = (
+  path: string,
+  body: JobRegistrationReqType,
+  retainedAttachmentIds?: number[],
+) => {
   const searchParams = new URLSearchParams({
     companyName: body.companyName,
     description: body.description,
@@ -10,6 +14,14 @@ export const getJobRequestUrl = (path: string, body: JobRegistrationReqType) => 
   });
 
   body.positionNames.forEach((positionName) => searchParams.append('positionNames', positionName));
+  if (retainedAttachmentIds) {
+    if (retainedAttachmentIds.length === 0) {
+      searchParams.append('retainedAttachmentIds', '');
+    }
+    retainedAttachmentIds.forEach((attachmentId) =>
+      searchParams.append('retainedAttachmentIds', String(attachmentId)),
+    );
+  }
 
   return `${path}?${searchParams}`;
 };

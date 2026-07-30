@@ -4,7 +4,9 @@ export const JobRegistrationSchema = z
   .object({
     companyName: z.string().trim().min(1, '회사명을 입력해주세요.'),
     description: z.string().trim().min(1, '회사 소개를 입력해주세요.'),
-    employmentType: z.enum(['FULL_TIME', 'CONTRACT', 'INTERN', 'INDUSTRIAL_FUNCTIONAL_PERSONNEL']),
+    employmentType: z.enum(['FULL_TIME', 'CONTRACT', 'INTERN', 'INDUSTRIAL_FUNCTIONAL_PERSONNEL'], {
+      error: '고용 형태를 선택해주세요.',
+    }),
     recruitStart: z.string().min(1, '모집 시작일을 선택해주세요.'),
     recruitEnd: z.string().min(1, '마감일을 선택해주세요.'),
     positionNames: z

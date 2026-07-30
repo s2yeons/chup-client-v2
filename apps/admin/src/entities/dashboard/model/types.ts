@@ -25,9 +25,14 @@ export interface AdminJobPostingType {
   createdAt: string;
 }
 
+export interface JobAttachmentType {
+  id: number;
+  fileName: string;
+}
+
 export interface AdminJobPostingDetailType extends AdminJobPostingType {
   positions: { id: number; name: string }[];
-  attachments: { id: number; fileName: string }[];
+  attachments: JobAttachmentType[];
 }
 
 export const employmentTypeMeta: Record<EmploymentType, { label: string }> = {
