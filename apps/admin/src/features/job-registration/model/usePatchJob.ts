@@ -16,18 +16,19 @@ import type { JobRegistrationReqType } from './schema';
 interface PatchJobParamsType {
   jobId: number;
   body: JobRegistrationReqType;
+  retainedAttachmentIds?: number[];
 }
 
 export const usePatchJob = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ jobId, body }: PatchJobParamsType) => {
+    mutationFn: async ({ jobId, body, retainedAttachmentIds }: PatchJobParamsType) => {
       const formData = new FormData();
       body.attachments.forEach((attachment) => formData.append('attachments', attachment));
 
       const response = await patch<ApiResponseType<AdminJobPostingType>>(
-        getJobRequestUrl(adminDashboardUrl.patchJob(jobId), body),
+        getJobRequestUrl(adminDashboardUrl.patchJob(jobId), body, retainedAttachmentIds),
         formData,
       );
 
