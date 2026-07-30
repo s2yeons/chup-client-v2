@@ -71,7 +71,9 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
   const attachmentCount = isAttachmentDetailAvailable
     ? retainedAttachments.length + attachments.length
     : 5;
-  const maximumNewAttachmentCount = isAttachmentDetailAvailable ? 5 - retainedAttachments.length : 0;
+  const maximumNewAttachmentCount = isAttachmentDetailAvailable
+    ? 5 - retainedAttachments.length
+    : 0;
   const isPending = isPostPending || isPatchPending || (!!job && isJobPending);
   const initializedJobIdRef = useRef<number | undefined>(undefined);
 

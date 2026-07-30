@@ -20,11 +20,13 @@
 ### Task 1: 유지 첨부파일 ID 직렬화
 
 **Files:**
+
 - Create: `apps/admin/src/features/job-registration/model/getJobRequestUrl.test.ts`
 - Modify: `apps/admin/src/features/job-registration/model/getJobRequestUrl.ts`
 - Modify: `apps/admin/src/features/job-registration/model/usePatchJob.ts`
 
 **Interfaces:**
+
 - Consumes: `JobRegistrationReqType`, `PATCH /api/admin/jobs/{jobId}`의 `retainedAttachmentIds?: number[]` query parameter
 - Produces: `getJobRequestUrl(path, body, retainedAttachmentIds?)`와 `usePatchJob`의 `{ jobId, body, retainedAttachmentIds }` 입력
 
@@ -47,19 +49,13 @@ const body = {
 };
 
 test('retainedAttachmentIds를 반복 query parameter로 보낸다', () => {
-  const url = new URL(
-    getJobRequestUrl('/api/admin/jobs/1', body, [3, 8]),
-    'https://example.test',
-  );
+  const url = new URL(getJobRequestUrl('/api/admin/jobs/1', body, [3, 8]), 'https://example.test');
 
   assert.deepEqual(url.searchParams.getAll('retainedAttachmentIds'), ['3', '8']);
 });
 
 test('모든 기존 파일을 삭제할 때 빈 retainedAttachmentIds를 보낸다', () => {
-  const url = new URL(
-    getJobRequestUrl('/api/admin/jobs/1', body, []),
-    'https://example.test',
-  );
+  const url = new URL(getJobRequestUrl('/api/admin/jobs/1', body, []), 'https://example.test');
 
   assert.deepEqual(url.searchParams.getAll('retainedAttachmentIds'), ['']);
 });
@@ -79,7 +75,7 @@ export const getJobRequestUrl = (
   body: JobRegistrationReqType,
   retainedAttachmentIds?: number[],
 ) => {
-  const searchParams = new URLSearchParams({ /* 기존 공고 필드 */ });
+  const searchParams = new URLSearchParams({/* 기존 공고 필드 */});
 
   body.positionNames.forEach((positionName) => searchParams.append('positionNames', positionName));
   if (retainedAttachmentIds) {
@@ -113,10 +109,12 @@ git commit -m "fix(job-registration): 유지 첨부파일 ID 전송"
 ### Task 2: 수정 폼의 기존 파일 표시와 삭제 상태
 
 **Files:**
+
 - Modify: `apps/admin/src/entities/dashboard/model/types.ts`
 - Modify: `apps/admin/src/features/job-registration/ui/JobRegistrationForm.tsx`
 
 **Interfaces:**
+
 - Consumes: `AdminJobPostingDetailType.attachments`, `usePatchJob({ jobId, body, retainedAttachmentIds })`
 - Produces: 삭제된 파일을 제외한 `retainedAttachmentIds`와 총 5개 이하의 신규 `attachments`
 
@@ -150,29 +148,31 @@ useEffect(() => {
 - [ ] **Step 3: 기존 파일명과 삭제 버튼을 렌더링한다.**
 
 ```tsx
-{job && retainedAttachments.length > 0 && (
-  <div className="space-y-2">
-    <p className="text-muted-foreground text-sm">기존 첨부파일</p>
-    {retainedAttachments.map((attachment) => (
-      <div key={attachment.id} className="flex items-center justify-between">
-        <span className="text-sm">{attachment.fileName}</span>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-xs"
-          onClick={() =>
-            setRetainedAttachments((currentAttachments) =>
-              currentAttachments.filter(({ id }) => id !== attachment.id),
-            )
-          }
-          aria-label={`${attachment.fileName} 삭제`}
-        >
-          <X />
-        </Button>
-      </div>
-    ))}
-  </div>
-)}
+{
+  job && retainedAttachments.length > 0 && (
+    <div className="space-y-2">
+      <p className="text-muted-foreground text-sm">기존 첨부파일</p>
+      {retainedAttachments.map((attachment) => (
+        <div key={attachment.id} className="flex items-center justify-between">
+          <span className="text-sm">{attachment.fileName}</span>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-xs"
+            onClick={() =>
+              setRetainedAttachments((currentAttachments) =>
+                currentAttachments.filter(({ id }) => id !== attachment.id),
+              )
+            }
+            aria-label={`${attachment.fileName} 삭제`}
+          >
+            <X />
+          </Button>
+        </div>
+      ))}
+    </div>
+  );
+}
 ```
 
 - [ ] **Step 4: 기존·신규 파일 합산 한도를 적용하고 저장 payload를 연결한다.**
