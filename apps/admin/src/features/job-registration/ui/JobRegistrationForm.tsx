@@ -24,6 +24,7 @@ import {
   type AdminJobPostingType,
   type EmploymentType,
   employmentTypeMeta,
+  type JobAttachmentType,
   useGetAdminJob,
 } from '@/entities/dashboard';
 
@@ -41,6 +42,7 @@ interface JobRegistrationFormProps {
 
 const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
   const [customPosition, setCustomPosition] = useState<string>('');
+  const [retainedAttachments, setRetainedAttachments] = useState<JobAttachmentType[]>([]);
   const { mutate: postJob, isPending: isPostPending } = usePostJob();
   const { mutate: patchJob, isPending: isPatchPending } = usePatchJob();
   const { data: jobDetail, isPending: isJobPending } = useGetAdminJob(job?.id);
@@ -65,6 +67,8 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
   });
   const positionNames = useWatch({ control, name: 'positionNames' }) ?? [];
   const attachments = useWatch({ control, name: 'attachments' }) ?? [];
+  const attachmentCount = retainedAttachments.length + attachments.length;
+  const maximumNewAttachmentCount = 5 - retainedAttachments.length;
   const isPending = isPostPending || isPatchPending || (!!job && isJobPending);
   const initializedJobIdRef = useRef<number | undefined>(undefined);
 
@@ -82,6 +86,7 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
       positionNames: jobDetail?.positions.map((position) => position.name) ?? [],
       attachments: [],
     });
+    setRetainedAttachments(jobDetail?.attachments ?? []);
   }, [job, jobDetail, isJobPending, reset]);
 
   const setServerError = (error: unknown) => {
@@ -125,13 +130,22 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
   const handleAttachmentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files ?? []);
 
-    setValue('attachments', [...attachments, ...files].slice(0, 5), { shouldValidate: true });
+    setValue('attachments', [...attachments, ...files].slice(0, maximumNewAttachmentCount), {
+      shouldValidate: true,
+    });
     event.target.value = '';
   };
 
   const handleSubmitForm = (body: JobRegistrationReqType) => {
     if (job) {
-      patchJob({ jobId: job.id, body }, { onSuccess: onClose, onError: setServerError });
+      patchJob(
+        {
+          jobId: job.id,
+          body,
+          retainedAttachmentIds: retainedAttachments.map(({ id }) => id),
+        },
+        { onSuccess: onClose, onError: setServerError },
+      );
       return;
     }
 
@@ -282,15 +296,38 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
             </Button>
           </div>
           <div className="space-y-2 sm:col-span-2">
+            {job && retainedAttachments.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-muted-foreground text-sm">기존 첨부파일</p>
+                {retainedAttachments.map((attachment) => (
+                  <div key={attachment.id} className="flex items-center justify-between">
+                    <span className="text-sm">{attachment.fileName}</span>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-xs"
+                      onClick={() =>
+                        setRetainedAttachments((currentAttachments) =>
+                          currentAttachments.filter(({ id }) => id !== attachment.id),
+                        )
+                      }
+                      aria-label={`${attachment.fileName} 삭제`}
+                    >
+                      <X />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
             <Input
               type="file"
               multiple
               accept="application/pdf,.hwp,.hwpx,image/*"
-              disabled={attachments.length === 5}
+              disabled={attachmentCount === 5}
               onChange={handleAttachmentChange}
             />
             <p className="text-muted-foreground text-sm">
-              첨부파일은 최대 5개까지 등록할 수 있습니다.
+              기존 파일과 새 파일을 합쳐 최대 5개까지 등록할 수 있습니다.
             </p>
             {errors.attachments && (
               <p className="text-destructive text-sm">{errors.attachments.message}</p>
