@@ -67,8 +67,11 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
   });
   const positionNames = useWatch({ control, name: 'positionNames' }) ?? [];
   const attachments = useWatch({ control, name: 'attachments' }) ?? [];
-  const attachmentCount = retainedAttachments.length + attachments.length;
-  const maximumNewAttachmentCount = 5 - retainedAttachments.length;
+  const isAttachmentDetailAvailable = !job || !!jobDetail;
+  const attachmentCount = isAttachmentDetailAvailable
+    ? retainedAttachments.length + attachments.length
+    : 5;
+  const maximumNewAttachmentCount = isAttachmentDetailAvailable ? 5 - retainedAttachments.length : 0;
   const isPending = isPostPending || isPatchPending || (!!job && isJobPending);
   const initializedJobIdRef = useRef<number | undefined>(undefined);
 
@@ -142,7 +145,9 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
         {
           jobId: job.id,
           body,
-          retainedAttachmentIds: retainedAttachments.map(({ id }) => id),
+          ...(jobDetail && {
+            retainedAttachmentIds: retainedAttachments.map(({ id }) => id),
+          }),
         },
         { onSuccess: onClose, onError: setServerError },
       );
@@ -296,7 +301,7 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
             </Button>
           </div>
           <div className="space-y-2 sm:col-span-2">
-            {job && retainedAttachments.length > 0 && (
+            {jobDetail && retainedAttachments.length > 0 && (
               <div className="space-y-2">
                 <p className="text-muted-foreground text-sm">기존 첨부파일</p>
                 {retainedAttachments.map((attachment) => (
