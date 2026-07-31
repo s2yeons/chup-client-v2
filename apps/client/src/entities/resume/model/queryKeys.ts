@@ -1,4 +1,4 @@
 export const resumeQueryKeys = {
   all: () => ['resume'] as const,
-  getResume: () => ['resume', 'me'] as const,
+  getResumes: () => ['resume', 'list'] as const,
 } as const;
