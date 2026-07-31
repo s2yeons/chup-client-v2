@@ -27,7 +27,7 @@ const ApplicantsView = () => {
     new Map(
       applicants
         ?.map((applicant) => applicant.jobPosting)
-        .filter((jobPosting): jobPosting is NonNullable<typeof jobPosting> => jobPosting !== null)
+        .filter((jobPosting): jobPosting is NonNullable<typeof jobPosting> => Boolean(jobPosting))
         .map((jobPosting) => [jobPosting.id, jobPosting]) ?? [],
     ).values(),
   );
@@ -147,7 +147,7 @@ const ApplicantsView = () => {
                     <td className="px-5 py-4 font-medium">
                       {applicant.jobPosting?.companyName ?? '-'}
                     </td>
-                    <td className="px-5 py-4">{applicant.jobPosition.name}</td>
+                    <td className="px-5 py-4">{applicant.jobPosition?.name ?? '-'}</td>
                     <td className="text-muted-foreground px-5 py-4">
                       {formatAppliedAt(applicant.appliedAt)}
                     </td>
