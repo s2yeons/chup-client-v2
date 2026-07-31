@@ -25,14 +25,17 @@ const ApplicantsView = () => {
 
   const companies = Array.from(
     new Map(
-      applicants?.map((applicant) => [applicant.jobPosting.id, applicant.jobPosting]) ?? [],
+      applicants
+        ?.map((applicant) => applicant.jobPosting)
+        .filter((jobPosting): jobPosting is NonNullable<typeof jobPosting> => jobPosting !== null)
+        .map((jobPosting) => [jobPosting.id, jobPosting]) ?? [],
     ).values(),
   );
   const selectedCompanyName = companies.find((company) => company.id === jobPostingId)?.companyName;
   const filteredApplicants =
     jobPostingId === undefined
       ? applicants
-      : applicants?.filter((applicant) => applicant.jobPosting.id === jobPostingId);
+      : applicants?.filter((applicant) => applicant.jobPosting?.id === jobPostingId);
 
   return (
     <div className="flex flex-col gap-6">
@@ -141,7 +144,9 @@ const ApplicantsView = () => {
                       </div>
                     </td>
                     <td className="px-5 py-4">{applicant.user.phoneNumber ?? '-'}</td>
-                    <td className="px-5 py-4 font-medium">{applicant.jobPosting.companyName}</td>
+                    <td className="px-5 py-4 font-medium">
+                      {applicant.jobPosting?.companyName ?? '-'}
+                    </td>
                     <td className="px-5 py-4">{applicant.jobPosition.name}</td>
                     <td className="text-muted-foreground px-5 py-4">
                       {formatAppliedAt(applicant.appliedAt)}
