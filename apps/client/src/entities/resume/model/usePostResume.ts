@@ -31,7 +31,10 @@ export const usePostResume = () => {
       return response.data;
     },
     onSuccess: (resume) => {
-      queryClient.setQueryData(resumeQueryKeys.getResume(), resume);
+      queryClient.setQueryData<ResumeType[]>(resumeQueryKeys.getResumes(), (currentResumes) => [
+        ...(currentResumes ?? []),
+        resume,
+      ]);
       toast.success('이력서가 저장되었습니다.');
     },
     onError: () => {
