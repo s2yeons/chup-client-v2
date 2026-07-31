@@ -33,7 +33,7 @@ import { type JobRegistrationReqType, JobRegistrationSchema } from '../model/sch
 import { usePatchJob } from '../model/usePatchJob';
 import { usePostJob } from '../model/usePostJob';
 
-const POSITION_OPTIONS = ['프론트엔드', '백엔드', 'DevOps', 'AI', '클라우드'];
+const POSITION_OPTIONS = ['프론트엔드', '백엔드', '풀스택', 'DevOps', 'AI', '클라우드'];
 
 interface JobRegistrationFormProps {
   job?: AdminJobPostingType;
