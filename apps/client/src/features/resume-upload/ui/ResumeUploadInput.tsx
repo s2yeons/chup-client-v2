@@ -7,10 +7,10 @@ import { cn, toast } from '@chup/ui';
 import { usePostResume, validateResumeFile } from '@/entities/resume';
 
 interface ResumeUploadInputProps {
-  hasResume: boolean;
+  disabled?: boolean;
 }
 
-const ResumeUploadInput = ({ hasResume }: ResumeUploadInputProps) => {
+const ResumeUploadInput = ({ disabled }: ResumeUploadInputProps) => {
   const [progress, setProgress] = useState<number>(0);
   const { mutate, isPending } = usePostResume();
 
@@ -35,17 +35,17 @@ const ResumeUploadInput = ({ hasResume }: ResumeUploadInputProps) => {
     <label
       className={cn(
         'bg-background inline-flex h-9 items-center gap-2 rounded-lg border px-3 text-sm font-medium',
-        isPending ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
+        isPending || disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
       )}
     >
       <input
-        disabled={isPending}
+        disabled={isPending || disabled}
         type="file"
         accept="application/pdf"
         className="sr-only"
         onChange={handleChange}
       />
-      {isPending ? `업로드 중... ${progress}%` : hasResume ? '이력서 교체' : '이력서 업로드'}
+      {isPending ? `업로드 중... ${progress}%` : '이력서 업로드'}
     </label>
   );
 };

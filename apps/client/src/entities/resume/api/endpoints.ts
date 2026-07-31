@@ -1,4 +1,5 @@
 export const resumeUrl = {
-  getResume: () => '/api/users/me/resume',
-  postResume: () => '/api/users/me/resume',
+  getResumes: () => '/api/users/me/resumes',
+  postResume: () => '/api/users/me/resumes',
+  deleteResume: (resumeId: number) => `/api/users/me/resumes/${resumeId}`,
 } as const;
