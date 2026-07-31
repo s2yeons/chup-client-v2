@@ -18,4 +18,5 @@ export interface ApplicationType {
 export interface PostApplicationReqType {
   jobId: number;
   jobPositionId: number;
+  resumeId: number;
 }
