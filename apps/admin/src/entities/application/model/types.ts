@@ -12,7 +12,7 @@ export interface ApplicationType {
   jobPosting: {
     id: number;
     companyName: string;
-  };
+  } | null;
   jobPosition: {
     id: number;
     name: string;

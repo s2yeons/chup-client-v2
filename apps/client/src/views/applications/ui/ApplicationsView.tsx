@@ -70,11 +70,12 @@ const ApplicationsView = () => {
             >
               <div className="flex items-center gap-3">
                 <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-xl font-bold">
-                  {application.jobPosting.companyName.slice(0, 1)}
+                  {(application.jobPosting?.companyName ?? '?').slice(0, 1)}
                 </div>
                 <div>
                   <p className="font-semibold">
-                    {application.jobPosting.companyName} · {application.jobPosition.name}
+                    {application.jobPosting?.companyName ?? '삭제된 공고'} ·{' '}
+                    {application.jobPosition.name}
                   </p>
                   <p className="text-muted-foreground mt-1 text-sm">
                     {formatAppliedAt(application.appliedAt)} 지원
