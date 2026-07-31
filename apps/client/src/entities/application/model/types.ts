@@ -9,7 +9,7 @@ export interface ApplicationType {
   jobPosition: {
     id: number;
     name: string;
-  };
+  } | null;
   status: ApplicationStatusType;
   appliedAt: string;
   resultUpdatedAt: string | null;
