@@ -1,5 +1,5 @@
 export * from './model/queryKeys';
 export * from './model/types';
 export { useGetResume } from './model/useGetResume';
-export { usePutResume } from './model/usePutResume';
+export { usePostResume } from './model/usePostResume';
 export * from './model/validateResumeFile';

@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { cn, toast } from '@chup/ui';
 
-import { usePutResume, validateResumeFile } from '@/entities/resume';
+import { usePostResume, validateResumeFile } from '@/entities/resume';
 
 interface ResumeUploadInputProps {
   hasResume: boolean;
@@ -12,7 +12,7 @@ interface ResumeUploadInputProps {
 
 const ResumeUploadInput = ({ hasResume }: ResumeUploadInputProps) => {
   const [progress, setProgress] = useState<number>(0);
-  const { mutate, isPending } = usePutResume();
+  const { mutate, isPending } = usePostResume();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

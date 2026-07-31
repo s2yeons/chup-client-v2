@@ -1,6 +1,6 @@
 'use client';
 
-import { type ApiResponseType, put } from '@chup/core/shared';
+import { type ApiResponseType, post } from '@chup/core/shared';
 import { toast } from '@chup/ui';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -8,20 +8,20 @@ import { resumeUrl } from '../api/endpoints';
 import { resumeQueryKeys } from './queryKeys';
 import type { ResumeType } from './types';
 
-interface PutResumeParamsType {
+interface PostResumeParamsType {
   file: File;
   onUploadProgress?: (percent: number) => void;
 }
 
-export const usePutResume = () => {
+export const usePostResume = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ file, onUploadProgress }: PutResumeParamsType) => {
+    mutationFn: async ({ file, onUploadProgress }: PostResumeParamsType) => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await put<ApiResponseType<ResumeType>>(resumeUrl.putResume(), formData, {
+      const response = await post<ApiResponseType<ResumeType>>(resumeUrl.postResume(), formData, {
         onUploadProgress: (event) => {
           if (!onUploadProgress || !event.total) return;
           onUploadProgress(Math.round((event.loaded / event.total) * 100));
