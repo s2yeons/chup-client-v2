@@ -75,7 +75,7 @@ const ApplicationsView = () => {
                 <div>
                   <p className="font-semibold">
                     {application.jobPosting?.companyName ?? '삭제된 공고'} ·{' '}
-                    {application.jobPosition.name}
+                    {application.jobPosition?.name ?? '-'}
                   </p>
                   <p className="text-muted-foreground mt-1 text-sm">
                     {formatAppliedAt(application.appliedAt)} 지원
