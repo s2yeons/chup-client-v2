@@ -5,13 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 
 import { jobUrl } from '../api/endpoints';
 import { jobQueryKeys } from './queryKeys';
-import type { GetJobsParamsType, JobPostingType } from './types';
+import type { GetJobsParamsType, JobPostingSummaryType } from './types';
 
 export const useGetJobs = (params: GetJobsParamsType) =>
   useQuery({
     queryKey: jobQueryKeys.getJobs(params),
     queryFn: async () => {
-      const response = await get<ApiResponseType<JobPostingType[]>>(jobUrl.getJobs(params));
+      const response = await get<ApiResponseType<JobPostingSummaryType[]>>(jobUrl.getJobs(params));
 
       return response.data;
     },

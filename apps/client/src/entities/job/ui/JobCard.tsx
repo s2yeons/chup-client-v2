@@ -1,10 +1,10 @@
-import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chup/ui';
+import { Badge, Card, CardContent, CardHeader, CardTitle } from '@chup/ui';
 import { CalendarDays } from 'lucide-react';
 
-import { employmentTypeMeta, type JobPostingType } from '../model/types';
+import { employmentTypeMeta, type JobPostingSummaryType } from '../model/types';
 
 interface JobCardProps {
-  job: JobPostingType;
+  job: JobPostingSummaryType;
   onOpen: (jobId: number) => void;
 }
 
@@ -19,13 +19,10 @@ const JobCard = ({ job, onOpen }: JobCardProps) => {
           <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-xl text-lg font-bold">
             {job.companyName.slice(0, 1)}
           </div>
-          <Badge variant={job.status === 'RECRUITING' ? 'default' : 'secondary'}>
-            {job.status === 'RECRUITING' ? '모집중' : '마감'}
-          </Badge>
+          <Badge>모집중</Badge>
         </div>
         <div className="pt-3">
           <CardTitle className="text-lg">{job.companyName}</CardTitle>
-          <CardDescription className="mt-1 line-clamp-2">{job.description}</CardDescription>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
