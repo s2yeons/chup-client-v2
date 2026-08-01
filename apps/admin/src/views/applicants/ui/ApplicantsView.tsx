@@ -15,27 +15,18 @@ import {
 import { CircleAlert, Download, FileArchive, Inbox, Loader2 } from 'lucide-react';
 
 import { applicantUrl, StatusBadge, useGetApplicants } from '@/entities/application';
+import { useGetAdminJobs } from '@/entities/dashboard';
 import { ApplicantResultButtons } from '@/features/applicant-result';
 
 import { formatAppliedAt } from '../lib/formatAppliedAt';
 
 const ApplicantsView = () => {
-  const { data: applicants, isPending, isError } = useGetApplicants();
   const [jobPostingId, setJobPostingId] = useState<number>();
-
-  const companies = Array.from(
-    new Map(
-      applicants
-        ?.map((applicant) => applicant.jobPosting)
-        .filter((jobPosting): jobPosting is NonNullable<typeof jobPosting> => Boolean(jobPosting))
-        .map((jobPosting) => [jobPosting.id, jobPosting]) ?? [],
-    ).values(),
+  const { data: applicants, isPending, isError } = useGetApplicants(
+    jobPostingId === undefined ? {} : { jobPostingId },
   );
-  const selectedCompanyName = companies.find((company) => company.id === jobPostingId)?.companyName;
-  const filteredApplicants =
-    jobPostingId === undefined
-      ? applicants
-      : applicants?.filter((applicant) => applicant.jobPosting?.id === jobPostingId);
+  const { data: jobs } = useGetAdminJobs();
+  const selectedCompanyName = jobs?.find((job) => job.id === jobPostingId)?.companyName;
 
   return (
     <div className="flex flex-col gap-6">
@@ -63,14 +54,14 @@ const ApplicantsView = () => {
         >
           전체
         </Button>
-        {companies.map((company) => (
+        {jobs?.map((job) => (
           <Button
-            key={company.id}
+            key={job.id}
             size="sm"
-            variant={jobPostingId === company.id ? 'default' : 'outline'}
-            onClick={() => setJobPostingId(company.id)}
+            variant={jobPostingId === job.id ? 'default' : 'outline'}
+            onClick={() => setJobPostingId(job.id)}
           >
-            {company.companyName}
+            {job.companyName}
           </Button>
         ))}
       </div>
@@ -80,7 +71,7 @@ const ApplicantsView = () => {
             {selectedCompanyName ? `${selectedCompanyName} 지원자` : '전체 지원자'}
           </CardTitle>
           <CardDescription>
-            총 {filteredApplicants?.length ?? 0}명의 지원자가 있습니다.
+            총 {applicants?.length ?? 0}명의 지원자가 있습니다.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0">
@@ -118,7 +109,7 @@ const ApplicantsView = () => {
                     </td>
                   </tr>
                 )}
-                {!isPending && !isError && filteredApplicants?.length === 0 && (
+                {!isPending && !isError && applicants?.length === 0 && (
                   <tr>
                     <td colSpan={7} className="text-muted-foreground py-10 text-center text-sm">
                       <div className="flex flex-col items-center gap-2">
@@ -128,31 +119,30 @@ const ApplicantsView = () => {
                     </td>
                   </tr>
                 )}
-                {filteredApplicants?.map((applicant) => (
+                {applicants?.map((applicant) => (
                   <tr key={applicant.id} className="border-t">
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
                         <Avatar className="size-9">
                           <AvatarFallback>
-                            {(applicant.user?.name ?? '?').slice(0, 1)}
+                            {applicant.name.slice(0, 1)}
                           </AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="font-semibold">
-                            {applicant.user?.name ?? '알 수 없음'} ·{' '}
-                            {applicant.user?.studentId ?? '-'}
+                            {applicant.name} · {applicant.studentId ?? '-'}
                           </p>
                           <p className="text-muted-foreground text-xs">
-                            {applicant.user?.email ?? '-'}
+                            {applicant.email}
                           </p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-5 py-4">{applicant.user?.phoneNumber ?? '-'}</td>
+                    <td className="px-5 py-4">{applicant.phoneNumber ?? '-'}</td>
                     <td className="px-5 py-4 font-medium">
-                      {applicant.jobPosting?.companyName ?? '-'}
+                      {applicant.companyName}
                     </td>
-                    <td className="px-5 py-4">{applicant.jobPosition?.name ?? '-'}</td>
+                    <td className="px-5 py-4">{applicant.positionName}</td>
                     <td className="text-muted-foreground px-5 py-4">
                       {formatAppliedAt(applicant.appliedAt)}
                     </td>
