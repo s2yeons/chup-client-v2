@@ -22,9 +22,11 @@ import { formatAppliedAt } from '../lib/formatAppliedAt';
 
 const ApplicantsView = () => {
   const [jobPostingId, setJobPostingId] = useState<number>();
-  const { data: applicants, isPending, isError } = useGetApplicants(
-    jobPostingId === undefined ? {} : { jobPostingId },
-  );
+  const {
+    data: applicants,
+    isPending,
+    isError,
+  } = useGetApplicants(jobPostingId === undefined ? {} : { jobPostingId });
   const { data: jobs } = useGetAdminJobs();
   const selectedCompanyName = jobs?.find((job) => job.id === jobPostingId)?.companyName;
 
@@ -70,9 +72,7 @@ const ApplicantsView = () => {
           <CardTitle>
             {selectedCompanyName ? `${selectedCompanyName} 지원자` : '전체 지원자'}
           </CardTitle>
-          <CardDescription>
-            총 {applicants?.length ?? 0}명의 지원자가 있습니다.
-          </CardDescription>
+          <CardDescription>총 {applicants?.length ?? 0}명의 지원자가 있습니다.</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
@@ -124,24 +124,18 @@ const ApplicantsView = () => {
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
                         <Avatar className="size-9">
-                          <AvatarFallback>
-                            {applicant.name.slice(0, 1)}
-                          </AvatarFallback>
+                          <AvatarFallback>{applicant.name.slice(0, 1)}</AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="font-semibold">
                             {applicant.name} · {applicant.studentId ?? '-'}
                           </p>
-                          <p className="text-muted-foreground text-xs">
-                            {applicant.email}
-                          </p>
+                          <p className="text-muted-foreground text-xs">{applicant.email}</p>
                         </div>
                       </div>
                     </td>
                     <td className="px-5 py-4">{applicant.phoneNumber ?? '-'}</td>
-                    <td className="px-5 py-4 font-medium">
-                      {applicant.companyName}
-                    </td>
+                    <td className="px-5 py-4 font-medium">{applicant.companyName}</td>
                     <td className="px-5 py-4">{applicant.positionName}</td>
                     <td className="text-muted-foreground px-5 py-4">
                       {formatAppliedAt(applicant.appliedAt)}
