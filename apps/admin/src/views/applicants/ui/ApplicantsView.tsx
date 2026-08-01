@@ -133,17 +133,22 @@ const ApplicantsView = () => {
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
                         <Avatar className="size-9">
-                          <AvatarFallback>{applicant.user.name.slice(0, 1)}</AvatarFallback>
+                          <AvatarFallback>
+                            {(applicant.user?.name ?? '?').slice(0, 1)}
+                          </AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="font-semibold">
-                            {applicant.user.name} · {applicant.user.studentId ?? '-'}
+                            {applicant.user?.name ?? '알 수 없음'} ·{' '}
+                            {applicant.user?.studentId ?? '-'}
                           </p>
-                          <p className="text-muted-foreground text-xs">{applicant.user.email}</p>
+                          <p className="text-muted-foreground text-xs">
+                            {applicant.user?.email ?? '-'}
+                          </p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-5 py-4">{applicant.user.phoneNumber ?? '-'}</td>
+                    <td className="px-5 py-4">{applicant.user?.phoneNumber ?? '-'}</td>
                     <td className="px-5 py-4 font-medium">
                       {applicant.jobPosting?.companyName ?? '-'}
                     </td>
