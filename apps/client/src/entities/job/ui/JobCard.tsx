@@ -15,7 +15,7 @@ const JobCard = ({ job, onOpen }: JobCardProps) => {
       className="group w-full text-left focus-visible:outline-none"
       onClick={() => onOpen(job.id)}
     >
-      <Card className="border-border/80 group-hover:border-primary/30 group-hover:-translate-y-0.5 group-hover:shadow-md group-focus-visible:border-primary group-focus-visible:ring-primary/30 h-full justify-between transition-all">
+      <Card className="border-border/80 group-hover:border-primary/30 group-focus-visible:border-primary group-focus-visible:ring-primary/30 h-full justify-between transition-all group-hover:-translate-y-0.5 group-hover:shadow-md">
         <CardHeader className="pb-3">
           <Badge>모집중</Badge>
           <div className="pt-3">
