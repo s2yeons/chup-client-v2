@@ -5,7 +5,19 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { AppMain, AppShell, AppSidebar, BrandLogo, Button, cn, ThemeToggle } from '@chup/ui';
+import {
+  AppMain,
+  AppShell,
+  AppSidebar,
+  BrandLogo,
+  Button,
+  cn,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+  ThemeToggle,
+} from '@chup/ui';
 import { LogOut, Menu, X } from 'lucide-react';
 
 import { useGetMe } from '@/entities/user';
@@ -97,32 +109,20 @@ const AppNavigation = ({ children }: AppNavigationProps) => {
           <div className="mx-auto max-w-7xl">{children}</div>
         </AppMain>
       </div>
-      {isMobileMenuOpen && (
-        <div
-          className="bg-foreground/20 fixed inset-0 z-50"
-          onMouseDown={() => setIsMobileMenuOpen(false)}
-        >
-          <div
-            className="bg-sidebar flex h-full w-72 flex-col shadow-xl"
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <div className="flex h-16 shrink-0 items-center justify-between px-5">
-              <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-                <BrandLogo imageSrc={CLIENT_LOGO_URL} name="CHUP" />
-              </Link>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsMobileMenuOpen(false)}
-                aria-label="메뉴 닫기"
-              >
-                <X />
-              </Button>
-            </div>
-            {navigationContent(true)}
+      <Dialog open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+        <DialogContent className="bg-sidebar inset-y-0 left-0 flex h-full w-72 flex-col shadow-xl">
+          <DialogTitle className="sr-only">메뉴</DialogTitle>
+          <div className="flex h-16 shrink-0 items-center justify-between px-5">
+            <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+              <BrandLogo imageSrc={CLIENT_LOGO_URL} name="CHUP" />
+            </Link>
+            <DialogClose aria-label="메뉴 닫기">
+              <X />
+            </DialogClose>
           </div>
-        </div>
-      )}
+          {navigationContent(true)}
+        </DialogContent>
+      </Dialog>
     </AppShell>
   );
 };

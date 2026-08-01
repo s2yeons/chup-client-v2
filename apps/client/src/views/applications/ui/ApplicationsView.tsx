@@ -24,7 +24,7 @@ const ApplicationsView = () => {
           제출한 지원서와 전형 결과를 한눈에 확인할 수 있어요.
         </p>
       </div>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         <StatCard
           label="전체 지원"
           value={`${applications?.length ?? 0}건`}
