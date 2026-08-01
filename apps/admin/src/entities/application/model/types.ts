@@ -8,7 +8,7 @@ export interface ApplicationType {
     studentId: string | null;
     email: string;
     phoneNumber: string | null;
-  };
+  } | null;
   jobPosting: {
     id: number;
     companyName: string;
