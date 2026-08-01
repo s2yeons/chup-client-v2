@@ -285,10 +285,10 @@ React Query(TanStack Query) v5를 사용한다.
 
 ### 서버 / 클라이언트 인스턴스 분리
 
-| 용도                       | 모듈                  | baseURL                      | 인증                                          |
-| -------------------------- | --------------------- | ---------------------------- | --------------------------------------------- |
+| 용도                       | 모듈                       | baseURL                    | 인증                                                     |
+| -------------------------- | -------------------------- | -------------------------- | -------------------------------------------------------- |
 | 브라우저                   | `@chup/core/shared`        | `NEXT_PUBLIC_API_BASE_URL` | `withCredentials`로 쿠키 전송, 401/403 시 `/signin` 이동 |
-| 서버 (RSC / Server Action) | `@chup/core/shared/server` | `NEXT_PUBLIC_API_BASE_URL` | `next/headers`의 쿠키를 읽어 주입                         |
+| 서버 (RSC / Server Action) | `@chup/core/shared/server` | `NEXT_PUBLIC_API_BASE_URL` | `next/headers`의 쿠키를 읽어 주입                        |
 
 서버 인스턴스는 **세션 갱신을 하지 않는다.** 401은 그대로 던진다. 브라우저 인스턴스는 401/403일 때 `/signin`으로 이동한다.
 

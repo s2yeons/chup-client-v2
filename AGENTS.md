@@ -166,10 +166,10 @@ className={cn('rounded-lg px-4', className)}
 
 ### 인스턴스
 
-| 용도                    | 모듈                       | baseURL                    | 토큰                                                    |
-| ----------------------- | -------------------------- | -------------------------- | ------------------------------------------------------- |
+| 용도                    | 모듈                       | baseURL                    | 토큰                                                     |
+| ----------------------- | -------------------------- | -------------------------- | -------------------------------------------------------- |
 | 브라우저                | `@chup/core/shared`        | `NEXT_PUBLIC_API_BASE_URL` | `withCredentials`로 쿠키 전송, 401/403 시 `/signin` 이동 |
-| 서버(RSC·Server Action) | `@chup/core/shared/server` | `NEXT_PUBLIC_API_BASE_URL` | `next/headers` 쿠키. **갱신 안 함** — 401은 그대로 던짐 |
+| 서버(RSC·Server Action) | `@chup/core/shared/server` | `NEXT_PUBLIC_API_BASE_URL` | `next/headers` 쿠키. **갱신 안 함** — 401은 그대로 던짐  |
 
 현재 앱에는 rewrite 프록시가 없다. 다운로드처럼 브라우저가 직접 요청하는 URL은 `NEXT_PUBLIC_API_BASE_URL`을 붙여 백엔드로 향하게 한다.
 

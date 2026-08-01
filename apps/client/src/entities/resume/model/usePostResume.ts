@@ -21,16 +21,12 @@ export const usePostResume = () => {
       const formData = new FormData();
       formData.append('files', file);
 
-      const response = await post<ApiResponseType<ResumeType[]>>(
-        resumeUrl.postResume(),
-        formData,
-        {
-          onUploadProgress: (event) => {
-            if (!onUploadProgress || !event.total) return;
-            onUploadProgress(Math.round((event.loaded / event.total) * 100));
-          },
+      const response = await post<ApiResponseType<ResumeType[]>>(resumeUrl.postResume(), formData, {
+        onUploadProgress: (event) => {
+          if (!onUploadProgress || !event.total) return;
+          onUploadProgress(Math.round((event.loaded / event.total) * 100));
         },
-      );
+      });
 
       return response.data;
     },
