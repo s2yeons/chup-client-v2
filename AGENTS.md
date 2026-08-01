@@ -168,10 +168,10 @@ className={cn('rounded-lg px-4', className)}
 
 | 용도                    | 모듈                       | baseURL                    | 토큰                                                    |
 | ----------------------- | -------------------------- | -------------------------- | ------------------------------------------------------- |
-| 브라우저                | `@chup/core/shared`        | `/api` (rewrite 프록시)    | 쿠키 → 인터셉터 주입, 401 시 자동 갱신                  |
+| 브라우저                | `@chup/core/shared`        | `NEXT_PUBLIC_API_BASE_URL` | `withCredentials`로 쿠키 전송, 401/403 시 `/signin` 이동 |
 | 서버(RSC·Server Action) | `@chup/core/shared/server` | `NEXT_PUBLIC_API_BASE_URL` | `next/headers` 쿠키. **갱신 안 함** — 401은 그대로 던짐 |
 
-rewrite 프록시(`/api/:path*`)는 각 앱 `next.config.ts`에 있음. 라우트에서 서버 fetch한 데이터는 클라이언트 쿼리의 `initialData`로 주입해 재사용.
+현재 앱에는 rewrite 프록시가 없다. 다운로드처럼 브라우저가 직접 요청하는 URL은 `NEXT_PUBLIC_API_BASE_URL`을 붙여 백엔드로 향하게 한다.
 
 ### 메서드 래퍼
 
@@ -185,13 +185,13 @@ const jobs = await get<JobType[]>(jobUrl.getJobs());
 
 ### URL 상수
 
-baseURL이 `/api`이므로 상수는 **`/v2`부터** 시작. `/api`를 붙이면 `/api/api/v2`가 됨. 엔티티 URL 객체는 해당 슬라이스 `api/`에 둔다(공용 `authUrl`은 `@chup/core`).
+baseURL은 API 서버 origin이므로 상수는 **`/api`부터** 시작한다. 엔티티 URL 객체는 해당 슬라이스 `api/`에 둔다(공용 `authUrl`은 `@chup/core`).
 
 ```ts
 export const jobUrl = {
-  getJobs: () => '/v2/jobs',
-  getJob: (id: number) => `/v2/jobs/${id}`,
-  postJob: () => '/v2/jobs',
+  getJobs: () => '/api/jobs',
+  getJob: (id: number) => `/api/jobs/${id}`,
+  postJob: () => '/api/admin/jobs',
 } as const;
 ```
 

@@ -287,16 +287,16 @@ React Query(TanStack Query) v5를 사용한다.
 
 | 용도                       | 모듈                  | baseURL                      | 인증                                          |
 | -------------------------- | --------------------- | ---------------------------- | --------------------------------------------- |
-| 브라우저                   | `@/shared/api/client` | `/api` (Next rewrite 프록시) | 쿠키 토큰을 인터셉터가 주입, 401 시 자동 갱신 |
-| 서버 (RSC / Server Action) | `@/shared/api/server` | `NEXT_PUBLIC_API_BASE_URL`   | `next/headers`의 쿠키를 읽어 주입             |
+| 브라우저                   | `@chup/core/shared`        | `NEXT_PUBLIC_API_BASE_URL` | `withCredentials`로 쿠키 전송, 401/403 시 `/signin` 이동 |
+| 서버 (RSC / Server Action) | `@chup/core/shared/server` | `NEXT_PUBLIC_API_BASE_URL` | `next/headers`의 쿠키를 읽어 주입                         |
 
-서버 인스턴스는 **토큰 갱신을 하지 않는다.** 일반 모듈에서는 쿠키 쓰기가 불가능해 갱신해도 브라우저에 반영되지 않기 때문이다. 401은 그대로 던지고 클라이언트가 갱신을 맡는다.
+서버 인스턴스는 **세션 갱신을 하지 않는다.** 401은 그대로 던진다. 브라우저 인스턴스는 401/403일 때 `/signin`으로 이동한다.
 
-라우트에서 서버 fetch한 데이터는 클라이언트 쿼리의 `initialData`로 주입해 재사용한다.
+현재 앱에는 Next rewrite 프록시가 없다. 다운로드처럼 앵커가 직접 요청하는 URL은 `NEXT_PUBLIC_API_BASE_URL`을 붙여 백엔드로 향하게 한다.
 
 ### HTTP 메서드 래퍼
 
-`@/shared/api/methods`의 `get / post / patch / put / del`을 사용한다.
+`@chup/core/shared`의 `get / post / patch / put / del`을 사용한다.
 
 응답 인터셉터가 `response.data`를 반환하도록 되어 있어서, `axiosInstance`를 직접 호출하면 타입은 `AxiosResponse<T>`인데 런타임 값은 `T`인 불일치가 생긴다. 래퍼는 `<T, T>` 제네릭으로 이 불일치를 흡수한다.
 
@@ -315,14 +315,13 @@ export const del = async <T>(...args: Parameters<typeof axiosInstance.delete>) =
 
 ### URL Controller
 
-도메인별 객체로 URL 경로를 관리한다. **`baseURL`이 이미 `/api`이므로 상수는 `/v2`부터 시작한다.** `/api/v2/...`로 쓰면 실제 요청이 `/api/api/v2/...`가 된다.
+도메인별 객체로 URL 경로를 관리한다. **baseURL은 API 서버 origin이므로 상수는 `/api`부터 시작한다.**
 
 ```ts
 export const jobUrl = {
-  getJobs: () => '/v2/jobs',
-  getMyJob: (id?: number) => `/v2/jobs/my/${id}`,
-  postJobRegistration: () => '/v2/jobs/registration',
-  deleteMyJob: (jobId: number) => `/v2/jobs/my/${jobId}`,
+  getJobs: () => '/api/jobs',
+  getJob: (id: number) => `/api/jobs/${id}`,
+  postJob: () => '/api/admin/jobs',
 } as const;
 ```
 
