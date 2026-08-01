@@ -16,6 +16,7 @@ import { Send } from 'lucide-react';
 import { usePostApplication } from '@/entities/application';
 import type { JobPositionType } from '@/entities/job';
 import { useGetResumes } from '@/entities/resume';
+import { useGetMe } from '@/entities/user';
 
 interface ApplyButtonProps {
   jobId: number;
@@ -25,13 +26,14 @@ interface ApplyButtonProps {
 
 const ApplyButton = ({ jobId, position, onComplete }: ApplyButtonProps) => {
   const { data: resumes } = useGetResumes();
+  const { data: user } = useGetMe();
   const [selectedResumeId, setSelectedResumeId] = useState<number | null>(null);
   const { isPending, mutate: postApplication } = usePostApplication();
 
   const resumeId = selectedResumeId ?? resumes?.[0]?.id;
 
   const handleApply = () => {
-    if (!resumeId) return;
+    if (!resumeId || !user?.phoneNumber) return;
 
     postApplication(
       { jobId, jobPositionId: position.id, resumeId },
@@ -67,7 +69,17 @@ const ApplyButton = ({ jobId, position, onComplete }: ApplyButtonProps) => {
           지원하려면 프로필에서 이력서를 먼저 등록해주세요.
         </p>
       )}
-      <Button className="w-full" size="lg" disabled={isPending || !resumeId} onClick={handleApply}>
+      {user && !user.phoneNumber && (
+        <p className="text-destructive text-sm">
+          지원하려면 프로필에서 전화번호를 먼저 등록해주세요.
+        </p>
+      )}
+      <Button
+        className="w-full"
+        size="lg"
+        disabled={isPending || !resumeId || !user?.phoneNumber}
+        onClick={handleApply}
+      >
         이 포지션에 지원하기
         <Send data-icon="inline-end" />
       </Button>
