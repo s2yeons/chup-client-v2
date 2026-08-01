@@ -15,12 +15,7 @@ const JobCard = ({ job, onOpen }: JobCardProps) => {
       onClick={() => onOpen(job.id)}
     >
       <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-3">
-          <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-xl text-lg font-bold">
-            {job.companyName.slice(0, 1)}
-          </div>
-          <Badge>모집중</Badge>
-        </div>
+        <Badge>모집중</Badge>
         <div className="pt-3">
           <CardTitle className="text-lg">{job.companyName}</CardTitle>
         </div>
