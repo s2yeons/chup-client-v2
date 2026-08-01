@@ -2,16 +2,8 @@
 
 import { useState } from 'react';
 
-import {
-  Button,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  toast,
-} from '@chup/ui';
-import { Send } from 'lucide-react';
+import { Button, toast } from '@chup/ui';
+import { FileText, Send } from 'lucide-react';
 
 import { usePostApplication } from '@/entities/application';
 import type { JobPositionType } from '@/entities/job';
@@ -49,21 +41,23 @@ const ApplyButton = ({ jobId, position, onComplete }: ApplyButtonProps) => {
 
   return (
     <div className="mt-4 flex flex-col gap-2">
-      <Select
-        value={resumeId ?? null}
-        onValueChange={(value) => setSelectedResumeId(value as number)}
-      >
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="제출할 이력서를 선택해주세요" />
-        </SelectTrigger>
-        <SelectContent side="bottom" align="start" alignItemWithTrigger={false}>
-          {resumes?.map((resume) => (
-            <SelectItem key={resume.id} value={resume.id}>
-              {resume.fileName}
-            </SelectItem>
+      {resumes && resumes.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-medium">제출할 이력서</p>
+          {resumes.map((resume) => (
+            <Button
+              key={resume.id}
+              variant={resumeId === resume.id ? 'secondary' : 'outline'}
+              className="h-auto w-full justify-start p-3 text-left"
+              aria-pressed={resumeId === resume.id}
+              onClick={() => setSelectedResumeId(resume.id)}
+            >
+              <FileText className="text-primary size-4" />
+              <span className="truncate">{resume.fileName}</span>
+            </Button>
           ))}
-        </SelectContent>
-      </Select>
+        </div>
+      )}
       {resumes?.length === 0 && (
         <p className="text-destructive text-sm">
           지원하려면 프로필에서 이력서를 먼저 등록해주세요.
