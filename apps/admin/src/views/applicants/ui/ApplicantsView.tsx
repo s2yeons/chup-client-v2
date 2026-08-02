@@ -2,16 +2,7 @@
 
 import { useState } from 'react';
 
-import {
-  Avatar,
-  AvatarFallback,
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@chup/ui';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chup/ui';
 import { CircleAlert, Download, FileArchive, Inbox, Loader2 } from 'lucide-react';
 
 import { applicantUrl, StatusBadge, useGetApplicants } from '@/entities/application';
@@ -122,16 +113,11 @@ const ApplicantsView = () => {
                 {applicants?.map((applicant) => (
                   <tr key={applicant.id} className="border-t">
                     <td className="px-5 py-4">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="size-9">
-                          <AvatarFallback>{applicant.name.slice(0, 1)}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-semibold">
-                            {applicant.name} · {applicant.studentId ?? '-'}
-                          </p>
-                          <p className="text-muted-foreground text-xs">{applicant.email}</p>
-                        </div>
+                      <div>
+                        <p className="font-semibold">
+                          {applicant.name} · {applicant.studentId ?? '-'}
+                        </p>
+                        <p className="text-muted-foreground text-xs">{applicant.email}</p>
                       </div>
                     </td>
                     <td className="px-5 py-4">{applicant.phoneNumber ?? '-'}</td>

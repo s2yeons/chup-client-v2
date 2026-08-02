@@ -162,7 +162,7 @@ const ProfileView = () => {
                     <Button
                       type="button"
                       variant="ghost"
-                      size="icon-xs"
+                      size="icon"
                       disabled={isDeletingResume}
                       onClick={() => deleteResume(resume.id)}
                       aria-label={`${resume.fileName} 삭제`}
