@@ -19,9 +19,9 @@ export const usePostResume = () => {
   return useMutation({
     mutationFn: async ({ file, onUploadProgress }: PostResumeParamsType) => {
       const formData = new FormData();
-      formData.append('files', file);
+      formData.append('file', file);
 
-      const response = await post<ApiResponseType<ResumeType[]>>(resumeUrl.postResume(), formData, {
+      const response = await post<ApiResponseType<ResumeType>>(resumeUrl.postResume(), formData, {
         onUploadProgress: (event) => {
           if (!onUploadProgress || !event.total) return;
           onUploadProgress(Math.round((event.loaded / event.total) * 100));
@@ -30,10 +30,10 @@ export const usePostResume = () => {
 
       return response.data;
     },
-    onSuccess: (resumes) => {
+    onSuccess: (resume) => {
       queryClient.setQueryData<ResumeType[]>(resumeQueryKeys.getResumes(), (currentResumes) => [
         ...(currentResumes ?? []),
-        ...resumes,
+        resume,
       ]);
       toast.success('이력서가 저장되었습니다.');
     },
