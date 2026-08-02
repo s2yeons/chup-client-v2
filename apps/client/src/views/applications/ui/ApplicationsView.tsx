@@ -68,18 +68,13 @@ const ApplicationsView = () => {
               key={application.id}
               className="flex flex-col gap-4 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between"
             >
-              <div className="flex items-center gap-3">
-                <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-xl font-bold">
-                  {application.companyName.slice(0, 1)}
-                </div>
-                <div>
-                  <p className="font-semibold">
-                    {application.companyName} · {application.positionName}
-                  </p>
-                  <p className="text-muted-foreground mt-1 text-sm">
-                    {formatAppliedAt(application.appliedAt)} 지원
-                  </p>
-                </div>
+              <div>
+                <p className="font-semibold">
+                  {application.companyName} · {application.positionName}
+                </p>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  {formatAppliedAt(application.appliedAt)} 지원
+                </p>
               </div>
               <StatusBadge status={application.status} />
             </div>

@@ -3,12 +3,14 @@
 import { useEffect, useRef, useState } from 'react';
 
 import {
+  Badge,
   Button,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
+  cn,
   Input,
   Select,
   SelectContent,
@@ -17,7 +19,7 @@ import {
   SelectValue,
 } from '@chup/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, X } from 'lucide-react';
+import { FileText, Plus, X } from 'lucide-react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 
 import {
@@ -39,6 +41,33 @@ interface JobRegistrationFormProps {
   job?: AdminJobPostingType;
   onClose: () => void;
 }
+
+interface AttachmentItemProps {
+  fileName: string;
+  label: '기존' | '새 파일';
+  onRemove: () => void;
+}
+
+const AttachmentItem = ({ fileName, label, onRemove }: AttachmentItemProps) => {
+  return (
+    <div className="flex min-w-0 items-center gap-3 rounded-xl border p-3">
+      <div className="bg-primary/10 text-primary shrink-0 rounded-lg p-2">
+        <FileText className="size-4" />
+      </div>
+      <p className="min-w-0 flex-1 truncate text-sm font-medium">{fileName}</p>
+      <Badge variant="secondary">{label}</Badge>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        onClick={onRemove}
+        aria-label={`${fileName} 삭제`}
+      >
+        <X />
+      </Button>
+    </div>
+  );
+};
 
 const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
   const [customPosition, setCustomPosition] = useState<string>('');
@@ -302,66 +331,66 @@ const JobRegistrationForm = ({ job, onClose }: JobRegistrationFormProps) => {
               추가
             </Button>
           </div>
-          <div className="space-y-2 sm:col-span-2">
-            {jobDetail && retainedAttachments.length > 0 && (
-              <div className="space-y-2">
-                <p className="text-muted-foreground text-sm">기존 첨부파일</p>
-                {retainedAttachments.map((attachment) => (
-                  <div key={attachment.id} className="flex items-center justify-between">
-                    <span className="text-sm">{attachment.fileName}</span>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon-xs"
-                      onClick={() =>
-                        setRetainedAttachments((currentAttachments) =>
-                          currentAttachments.filter(({ id }) => id !== attachment.id),
-                        )
-                      }
-                      aria-label={`${attachment.fileName} 삭제`}
-                    >
-                      <X />
-                    </Button>
-                  </div>
-                ))}
+          <div className="space-y-3 sm:col-span-2">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="font-medium">첨부파일</p>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  최대 5개까지 등록할 수 있습니다.
+                </p>
               </div>
-            )}
-            <Input
-              type="file"
-              multiple
-              accept="application/pdf,.hwp,.hwpx,image/*"
-              disabled={attachmentCount === 5}
-              onChange={handleAttachmentChange}
-            />
-            <p className="text-muted-foreground text-sm">
-              기존 파일과 새 파일을 합쳐 최대 5개까지 등록할 수 있습니다.
-            </p>
-            {errors.attachments && (
-              <p className="text-destructive text-sm">{errors.attachments.message}</p>
-            )}
-            {attachments.map((attachment) => (
-              <div
-                key={`${attachment.name}-${attachment.lastModified}`}
-                className="flex items-center justify-between"
-              >
-                <span className="text-sm">{attachment.name}</span>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-xs"
-                  onClick={() =>
+              <Badge variant="secondary">{attachmentCount}/5</Badge>
+            </div>
+            <div className="space-y-2">
+              {retainedAttachments.map((attachment) => (
+                <AttachmentItem
+                  key={attachment.id}
+                  fileName={attachment.fileName}
+                  label="기존"
+                  onRemove={() =>
+                    setRetainedAttachments((currentAttachments) =>
+                      currentAttachments.filter(({ id }) => id !== attachment.id),
+                    )
+                  }
+                />
+              ))}
+              {attachments.map((attachment) => (
+                <AttachmentItem
+                  key={`${attachment.name}-${attachment.lastModified}`}
+                  fileName={attachment.name}
+                  label="새 파일"
+                  onRemove={() =>
                     setValue(
                       'attachments',
                       attachments.filter((currentAttachment) => currentAttachment !== attachment),
                       { shouldValidate: true },
                     )
                   }
-                  aria-label={`${attachment.name} 삭제`}
-                >
-                  <X />
-                </Button>
-              </div>
-            ))}
+                />
+              ))}
+            </div>
+            <label
+              className={cn(
+                'border-input inline-flex h-8 items-center gap-1.5 rounded-lg border px-2.5 text-sm font-medium',
+                attachmentCount === 5
+                  ? 'cursor-not-allowed opacity-50'
+                  : 'hover:bg-muted cursor-pointer',
+              )}
+            >
+              <Input
+                type="file"
+                multiple
+                accept="application/pdf,.hwp,.hwpx,image/*"
+                disabled={attachmentCount === 5}
+                className="sr-only"
+                onChange={handleAttachmentChange}
+              />
+              <Plus className="size-4" />
+              파일 선택
+            </label>
+            {errors.attachments && (
+              <p className="text-destructive text-sm">{errors.attachments.message}</p>
+            )}
           </div>
           {errors.root && (
             <p className="text-destructive text-sm sm:col-span-2">{errors.root.message}</p>
