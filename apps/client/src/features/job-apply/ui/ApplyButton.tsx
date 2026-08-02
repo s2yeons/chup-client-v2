@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { Button, toast } from '@chup/ui';
+import { Button, Checkbox, cn, toast } from '@chup/ui';
 import { FileText, Send } from 'lucide-react';
 
 import { usePostApplication } from '@/entities/application';
@@ -19,16 +19,26 @@ interface ApplyButtonProps {
 const ApplyButton = ({ jobId, position, onComplete }: ApplyButtonProps) => {
   const { data: resumes } = useGetResumes();
   const { data: user } = useGetMe();
-  const [selectedResumeId, setSelectedResumeId] = useState<number | null>(null);
+  const [selectedResumeIds, setSelectedResumeIds] = useState<number[] | null>(null);
   const { isPending, mutate: postApplication } = usePostApplication();
 
-  const resumeId = selectedResumeId ?? resumes?.[0]?.id;
+  const resumeIds = selectedResumeIds ?? (resumes?.[0] ? [resumes[0].id] : []);
+
+  const handleResumeToggle = (resumeId: number) => {
+    setSelectedResumeIds((currentResumeIds) => {
+      const currentIds = currentResumeIds ?? (resumes?.[0] ? [resumes[0].id] : []);
+
+      return currentIds.includes(resumeId)
+        ? currentIds.filter((currentResumeId) => currentResumeId !== resumeId)
+        : [...currentIds, resumeId];
+    });
+  };
 
   const handleApply = () => {
-    if (!resumeId || !user?.phoneNumber) return;
+    if (resumeIds.length === 0 || !user?.phoneNumber) return;
 
     postApplication(
-      { jobId, jobPositionId: position.id, resumeId },
+      { jobId, jobPositionId: position.id, resumeIds },
       {
         onSuccess: () => {
           onComplete();
@@ -44,18 +54,27 @@ const ApplyButton = ({ jobId, position, onComplete }: ApplyButtonProps) => {
       {resumes && resumes.length > 0 && (
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium">제출할 이력서</p>
-          {resumes.map((resume) => (
-            <Button
-              key={resume.id}
-              variant={resumeId === resume.id ? 'secondary' : 'outline'}
-              className="h-auto w-full justify-start p-3 text-left"
-              aria-pressed={resumeId === resume.id}
-              onClick={() => setSelectedResumeId(resume.id)}
-            >
-              <FileText className="text-primary size-4" />
-              <span className="truncate">{resume.fileName}</span>
-            </Button>
-          ))}
+          {resumes.map((resume) => {
+            const isSelected = resumeIds.includes(resume.id);
+
+            return (
+              <label
+                key={resume.id}
+                className={cn(
+                  'flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-colors',
+                  isSelected && 'border-primary bg-primary/5',
+                )}
+              >
+                <Checkbox
+                  checked={isSelected}
+                  onCheckedChange={() => handleResumeToggle(resume.id)}
+                  className="size-5"
+                />
+                <FileText className="text-primary size-4 shrink-0" />
+                <span className="truncate text-sm font-medium">{resume.fileName}</span>
+              </label>
+            );
+          })}
         </div>
       )}
       {resumes?.length === 0 && (
@@ -71,7 +90,7 @@ const ApplyButton = ({ jobId, position, onComplete }: ApplyButtonProps) => {
       <Button
         className="w-full"
         size="lg"
-        disabled={isPending || !resumeId || !user?.phoneNumber}
+        disabled={isPending || resumeIds.length === 0 || !user?.phoneNumber}
         onClick={handleApply}
       >
         이 포지션에 지원하기

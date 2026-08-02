@@ -11,10 +11,10 @@ export const usePostApplication = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ jobId, jobPositionId, resumeId }: PostApplicationReqType) => {
+    mutationFn: async ({ jobId, jobPositionId, resumeIds }: PostApplicationReqType) => {
       const response = await post<ApiResponseType<ApplicationType>>(
         applicationUrl.postApplication(jobId),
-        { jobPositionId, resumeId },
+        { jobPositionId, resumeIds },
       );
 
       return response.data;
