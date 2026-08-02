@@ -24,7 +24,7 @@ const ApplicationsView = () => {
           제출한 지원서와 전형 결과를 한눈에 확인할 수 있어요.
         </p>
       </div>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         <StatCard
           label="전체 지원"
           value={`${applications?.length ?? 0}건`}
@@ -70,12 +70,11 @@ const ApplicationsView = () => {
             >
               <div className="flex items-center gap-3">
                 <div className="bg-secondary text-primary flex size-11 items-center justify-center rounded-xl font-bold">
-                  {(application.jobPosting?.companyName ?? '?').slice(0, 1)}
+                  {application.companyName.slice(0, 1)}
                 </div>
                 <div>
                   <p className="font-semibold">
-                    {application.jobPosting?.companyName ?? '삭제된 공고'} ·{' '}
-                    {application.jobPosition?.name ?? '-'}
+                    {application.companyName} · {application.positionName}
                   </p>
                   <p className="text-muted-foreground mt-1 text-sm">
                     {formatAppliedAt(application.appliedAt)} 지원

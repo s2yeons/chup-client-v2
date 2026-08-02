@@ -8,5 +8,6 @@ export interface UserType {
   email: string;
   phoneNumber: string | null;
   approved: boolean;
+  version: number;
   createdAt: string;
 }

@@ -1,3 +1,5 @@
+import { API_BASE_URL } from '@chup/core/shared';
+
 import type { GetApplicantsParamsType } from '../model/types';
 
 export const applicantUrl = {
@@ -11,10 +13,11 @@ export const applicantUrl = {
     return queryString ? `/api/admin/applicants?${queryString}` : '/api/admin/applicants';
   },
   patchApplicantResult: (applicationId: number) => `/api/admin/applicants/${applicationId}/result`,
-  getApplicantResume: (applicationId: number) => `/api/admin/applicants/${applicationId}/resume`,
+  getApplicantResume: (applicationId: number) =>
+    `${API_BASE_URL}/api/admin/applicants/${applicationId}/resume`,
   // 쿼리 파라미터명은 companyId이지만 실제로는 jobPosting id를 받는 백엔드 계약을 그대로 따름
   getApplicantsZip: (jobPostingId?: number) =>
     jobPostingId
-      ? `/api/admin/applicants/zip?companyId=${jobPostingId}`
-      : '/api/admin/applicants/zip',
+      ? `${API_BASE_URL}/api/admin/applicants/zip?companyId=${jobPostingId}`
+      : `${API_BASE_URL}/api/admin/applicants/zip`,
 } as const;

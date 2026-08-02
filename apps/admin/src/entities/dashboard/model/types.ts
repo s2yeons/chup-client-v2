@@ -14,7 +14,7 @@ export interface AdminDashboardType {
   passed: number;
 }
 
-export interface AdminJobPostingType {
+interface JobPostingType {
   id: number;
   companyName: string;
   description: string;
@@ -23,6 +23,11 @@ export interface AdminJobPostingType {
   recruitEnd: string;
   status: JobStatusType;
   createdAt: string;
+  positions: { id: number; name: string }[];
+}
+
+export interface AdminJobPostingType extends JobPostingType {
+  applicantCount: number;
 }
 
 export interface JobAttachmentType {
@@ -30,8 +35,7 @@ export interface JobAttachmentType {
   fileName: string;
 }
 
-export interface AdminJobPostingDetailType extends AdminJobPostingType {
-  positions: { id: number; name: string }[];
+export interface AdminJobPostingDetailType extends JobPostingType {
   attachments: JobAttachmentType[];
 }
 

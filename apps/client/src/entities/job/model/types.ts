@@ -12,15 +12,12 @@ export interface GetJobsParamsType {
   sort?: JobSortType;
 }
 
-export interface JobPostingType {
+export interface JobPostingSummaryType {
   id: number;
   companyName: string;
-  description: string;
   employmentType: EmploymentType;
-  recruitStart: string;
   recruitEnd: string;
-  status: JobStatusType;
-  createdAt: string;
+  positions: JobPositionType[];
 }
 
 export interface JobPositionType {
@@ -33,8 +30,11 @@ export interface AttachmentType {
   fileName: string;
 }
 
-export interface JobPostingDetailType extends JobPostingType {
-  positions: JobPositionType[];
+export interface JobPostingDetailType extends JobPostingSummaryType {
+  description: string;
+  recruitStart: string;
+  status: JobStatusType;
+  createdAt: string;
   attachments: AttachmentType[];
 }
 
