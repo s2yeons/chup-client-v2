@@ -16,6 +16,15 @@ interface ApplyButtonProps {
   onComplete: () => void;
 }
 
+interface ApiErrorType {
+  response?: {
+    status?: number;
+    data?: {
+      message?: string;
+    };
+  };
+}
+
 const ApplyButton = ({ jobId, position, onComplete }: ApplyButtonProps) => {
   const { data: resumes } = useGetResumes();
   const { data: user } = useGetMe();
@@ -34,6 +43,17 @@ const ApplyButton = ({ jobId, position, onComplete }: ApplyButtonProps) => {
     });
   };
 
+  const handleApplyError = (error: unknown) => {
+    const response =
+      typeof error === 'object' && error !== null ? (error as ApiErrorType).response : undefined;
+
+    toast.error(
+      response?.status === 409
+        ? (response.data?.message ?? '이미 지원한 공고입니다.')
+        : '지원에 실패했어요. 다시 시도해주세요.',
+    );
+  };
+
   const handleApply = () => {
     if (resumeIds.length === 0 || !user?.phoneNumber) return;
 
@@ -44,7 +64,7 @@ const ApplyButton = ({ jobId, position, onComplete }: ApplyButtonProps) => {
           onComplete();
           toast.success(`${position.name} 포지션에 지원했습니다.`);
         },
-        onError: () => toast.error('지원에 실패했어요. 다시 시도해주세요.'),
+        onError: handleApplyError,
       },
     );
   };

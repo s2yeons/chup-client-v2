@@ -45,14 +45,9 @@ const JobDetail = ({ jobId, onClose }: JobDetailProps) => {
         )}
         {job && (
           <>
-            <div className="mt-8 flex items-start gap-4">
-              <div className="bg-secondary text-primary flex size-14 shrink-0 items-center justify-center rounded-2xl text-2xl font-bold">
-                {job.companyName.slice(0, 1)}
-              </div>
-              <div>
-                <p className="text-muted-foreground text-sm">{job.companyName}</p>
-                <h2 className="mt-1 text-2xl font-bold text-balance">채용 공고</h2>
-              </div>
+            <div className="mt-8">
+              <p className="text-muted-foreground text-sm">{job.companyName}</p>
+              <h2 className="mt-1 text-2xl font-bold text-balance">채용 공고</h2>
             </div>
             <Separator className="my-7" />
             <div className="grid grid-cols-2 gap-5">
